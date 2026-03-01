@@ -1,6 +1,20 @@
-# Labyrinth of the Dragon - ROM Build
+# Labyrinth of the Dragon - Complete Game Package
 
-This folder contains the compiled Game Boy Color ROM for **Labyrinth of the Dragon**.
+This folder contains **everything needed** to build the Game Boy Color ROM for **Labyrinth of the Dragon**.
+
+## 📁 Directory Structure
+
+```
+LabyrinthOfTheDragon/
+├── src/        - 35 C source files + 21 header files
+├── assets/     - 41 game assets (art, tiles, sprites)
+├── res/        - 58 resources (maps, tilemaps, tiles)
+├── data/       - 37 data files (tables, strings, configs)
+├── Makefile    - Build configuration
+└── README.md   - This file
+```
+
+**Total:** 204 files ready for Game Boy Color compilation
 
 ## ROM Information
 
