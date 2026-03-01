@@ -44,3 +44,11 @@ To build the ROM run the following commands:
 * `npm install`
 * `make assets`
 * `make`
+Screen Manager: Creating new project with data: {name: "...", author: "..."}
+Screen Manager: Project created: {...}
+Screen Manager: About to show title screen
+Screen Manager: showTitleScreen called with project: {...}
+Screen Manager: Title screen elements: {gameName: true, projectInfo: true, ...}
+Screen Manager: About to show title screen
+Screen Manager: Showing screen: title
+Screen Manager: Screen shown successfully: title

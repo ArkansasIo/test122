@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Screen Manager Test</title>
+  <style>
+    body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #1a1a2e; color: white; }
+    .test-controls { margin-bottom: 20px; }
+    button { padding: 10px 20px; margin: 5px; background: #58a6ff; border: none; color: black; font-weight: bold; cursor: pointer; border-radius: 4px; }
+    button:hover { background: #64ffda; }
+    .status { background: #161b22; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #30363d; }
+    .status h3 { margin-top: 0; color: #64ffda; }
+    .log { background: #0d1117; padding: 10px; border-radius: 4px; max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+    .log-entry { margin: 2px 0; padding: 4px; }
+    .log-info { color: #58a6ff; }
+    .log-error { color: #f85149; }
+    .log-success { color: #3fb950; }
+  </style>
+</head>
+<body>
+  <h1>🐉 Screen Manager Debug Tool</h1>
+  
+  <div class="test-controls">
+    <button onclick="testSplash()">Test Splash</button>
+    <button onclick="testProjectManager()">Test Project Manager</button>
+    <button onclick="testTitleScreen()">Test Title Screen</button>
+    <button onclick="testEditor()">Test Editor</button>
+    <button onclick="testFullFlow()">Test Full Flow</button>
+    <button onclick="clearLog()">Clear Log</button>
+  </div>
+  
+  <div class="status">
+    <h3>Current Status</h3>
+    <div id="statusInfo">
+      <p><strong>Current Screen:</strong> <span id="currentScreen">None</span></p>
+      <p><strong>Editor Element:</strong> <span id="editorStatus">Checking...</span></p>
+      <p><strong>Screen Manager:</strong> <span id="managerStatus">Checking...</span></p>
+    </div>
+  </div>
+  
+  <div class="status">
+    <h3>Console Log</h3>
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    // Capture console logs
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    function addLogEntry(message, type = 'info') {
+      const log = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry log-${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+    
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      addLogEntry(args.join(' '), 'info');
+    };
+    
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      addLogEntry(args.join(' '), 'error');
+    };
+    
+    console.warn = function(...args) {
+      originalWarn.apply(console, args);
+      addLogEntry(args.join(' '), 'info');
+    };
+    
+    // Update status
+    function updateStatus() {
+      const currentScreenEl = document.getElementById('currentScreen');
+      const editorStatusEl = document.getElementById('editorStatus');
+      const managerStatusEl = document.getElementById('managerStatus');
+      
+      if (window.screenManager) {
+        currentScreenEl.textContent = window.screenManager.currentScreen || 'None';
+        managerStatusEl.textContent = '✅ Loaded';
+        managerStatusEl.style.color = '#3fb950';
+        
+        const editorEl = document.getElementById('app');
+        if (editorEl) {
+          const display = window.getComputedStyle(editorEl).display;
+          editorStatusEl.textContent = `✅ Found (display: ${display})`;
+          editorStatusEl.style.color = '#3fb950';
+        } else {
+          editorStatusEl.textContent = '❌ Not Found';
+          editorStatusEl.style.color = '#f85149';
+        }
+      } else {
+        managerStatusEl.textContent = '❌ Not Loaded';
+        managerStatusEl.style.color = '#f85149';
+      }
+    }
+    
+    // Test functions
+    function testSplash() {
+      console.log('Testing: Splash Screen');
+      if (window.screenManager) {
+        window.screenManager.showScreen('splash');
+        updateStatus();
+      } else {
+        console.error('Screen Manager not loaded!');
+      }
+    }
+    
+    function testProjectManager() {
+      console.log('Testing: Project Manager');
+      if (window.screenManager) {
+        window.screenManager.showScreen('projectManager');
+        updateStatus();
+      } else {
+        console.error('Screen Manager not loaded!');
+      }
+    }
+    
+    function testTitleScreen() {
+      console.log('Testing: Title Screen');
+      if (window.screenManager && window.screenManager.projectSystem) {
+        const project = window.screenManager.projectSystem.createProject({
+          name: 'Test Project',
+          author: 'Debug Tool',
+          description: 'Testing the title screen'
+        });
+        window.screenManager.showTitleScreen(project);
+        updateStatus();
+      } else {
+        console.error('Screen Manager or Project System not loaded!');
+      }
+    }
+    
+    function testEditor() {
+      console.log('Testing: Editor Screen');
+      if (window.screenManager) {
+        window.screenManager.openEditor();
+        setTimeout(updateStatus, 100);
+      } else {
+        console.error('Screen Manager not loaded!');
+      }
+    }
+    
+    function testFullFlow() {
+      console.log('Testing: Full Flow (Splash → PM → Title → Editor)');
+      if (window.screenManager) {
+        window.screenManager.showScreen('splash');
+        setTimeout(() => {
+          window.screenManager.showScreen('projectManager');
+          setTimeout(() => {
+            testTitleScreen();
+            setTimeout(() => {
+              window.screenManager.openEditor();
+              setTimeout(updateStatus, 100);
+            }, 1000);
+          }, 1000);
+        }, 1000);
+      } else {
+        console.error('Screen Manager not loaded!');
+      }
+    }
+    
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+    }
+    
+    // Update status every second
+    setInterval(updateStatus, 1000);
+    
+    // Initial status update
+    setTimeout(updateStatus, 1000);
+    
+    console.log('Debug tool ready! Click buttons above to test screen transitions.');
+  </script>
+</body>
+</html>

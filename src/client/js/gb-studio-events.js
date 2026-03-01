@@ -207,6 +207,11 @@
     }
     
     render() {
+      if (!this.container) {
+        console.warn('[EventEditor] Container not found');
+        return;
+      }
+      
       if (!this.entity) {
         this.container.innerHTML = `
           <div class="event-editor">

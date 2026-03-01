@@ -13,6 +13,33 @@
   <link rel="stylesheet" href="/css/title-screen.css" />
 </head>
 <body>
+  <!-- Initial loading indicator (removed by screen-manager.js) -->
+  <div id="initialLoader" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+       display: flex; flex-direction: column; align-items: center; justify-content: center; 
+       z-index: 9999; font-family: sans-serif; color: white;">
+    <div style="font-size: 80px; margin-bottom: 20px;">🐉</div>
+    <div style="font-size: 32px; font-weight: bold; margin-bottom: 10px;">Enchantment Engine</div>
+    <div style="font-size: 16px; opacity: 0.9; margin-bottom: 30px;">Loading...</div>
+    <div style="width: 200px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px; overflow: hidden;">
+      <div style="height: 100%; background: white; animation: loading 1.5s ease-in-out infinite;"></div>
+    </div>
+  </div>
+  <style>
+    @keyframes loading {
+      0% { width: 0%; margin-left: 0%; }
+      50% { width: 50%; margin-left: 25%; }
+      100% { width: 0%; margin-left: 100%; }
+    }
+  </style>
+  
+  <noscript>
+    <div style="padding: 40px; font-family: sans-serif; text-align: center; background: white; color: black; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000;">
+      <h1>JavaScript Required</h1>
+      <p>Please enable JavaScript to use this application.</p>
+    </div>
+  </noscript>
+  
   <!-- Splash screen, project manager, and title screen added by screen-manager.js -->
   
   <div id="app" style="display: none;">
@@ -263,5 +290,24 @@ Requires GBDK-2020 (auto-installed at ~/gbdk/)</div>
   <script src="/js/widgets.js"></script>
   <script src="/js/gb-studio-init.js"></script>
   <script src="/js/app.js"></script>
+  
+  <!-- Fallback: If screen manager doesn't load within 5 seconds, show error -->
+  <script>
+    setTimeout(function() {
+      var loader = document.getElementById('initialLoader');
+      if (loader) {
+        loader.innerHTML = '<div style="text-align: center; padding: 40px;">' +
+          '<div style="font-size: 60px; margin-bottom: 20px;">⚠️</div>' +
+          '<div style="font-size: 24px; font-weight: bold; margin-bottom: 15px;">Loading Error</div>' +
+          '<div style="font-size: 14px; opacity: 0.9; margin-bottom: 20px;">Screen Manager failed to initialize</div>' +
+          '<div style="font-size: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; text-align: left; font-family: monospace; max-width: 600px;">' +
+          'Check browser console (F12) for errors<br>' +
+          'Verify all JavaScript files loaded correctly<br>' +
+          'Try hard refresh: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)' +
+          '</div></div>';
+        loader.style.background = '#ff6b6b';
+      }
+    }, 5000);
+  </script>
 </body>
 </html>

@@ -37,10 +37,29 @@ class ScreenManager {
    * Create screen elements
    */
   createScreens() {
+    // Remove initial loader if it exists
+    const initialLoader = document.getElementById('initialLoader');
+    if (initialLoader) {
+      console.log('Screen Manager: Removing initial loader');
+      initialLoader.remove();
+    }
+    
     this.createSplashScreen();
     this.createProjectManagerScreen();
     this.createTitleScreen();
     this.screens.editor = document.getElementById('app');
+    
+    // Log for debugging
+    console.log('Screen Manager: Screens initialized', {
+      splash: !!this.screens.splash,
+      projectManager: !!this.screens.projectManager,
+      titleScreen: !!this.screens.titleScreen,
+      editor: !!this.screens.editor
+    });
+    
+    if (!this.screens.editor) {
+      console.error('Screen Manager: Editor element (#app) not found!');
+    }
   }
 
   /**
@@ -232,14 +251,17 @@ class ScreenManager {
    * Create new project
    */
   createNewProject(projectData) {
+    console.log('Screen Manager: Creating new project with data:', projectData);
+    
     if (!this.projectSystem) {
       this.projectSystem = new window.ProjectSystem();
     }
 
     const project = this.projectSystem.createProject(projectData);
-    console.log('Project created:', project);
+    console.log('Screen Manager: Project created:', project);
     
     this.updateRecentProjectsList();
+    console.log('Screen Manager: About to show title screen');
     this.showTitleScreen(project);
   }
 
@@ -412,7 +434,12 @@ class ScreenManager {
    * Show title screen with project data
    */
   showTitleScreen(project) {
-    if (!project) return;
+    console.log('Screen Manager: showTitleScreen called with project:', project);
+    
+    if (!project) {
+      console.error('Screen Manager: No project provided to showTitleScreen!');
+      return;
+    }
 
     // Update title screen with project info
     const gameName = document.getElementById('titleGameName');
@@ -421,25 +448,37 @@ class ScreenManager {
     const actorCount = document.getElementById('titleActorCount');
     const scriptCount = document.getElementById('titleScriptCount');
 
+    console.log('Screen Manager: Title screen elements:', {
+      gameName: !!gameName,
+      projectInfo: !!projectInfo,
+      sceneCount: !!sceneCount,
+      actorCount: !!actorCount,
+      scriptCount: !!scriptCount
+    });
+
     if (gameName) gameName.textContent = project.name;
     if (projectInfo) projectInfo.textContent = `by ${project.author} | ${project.description}`;
     if (sceneCount) sceneCount.textContent = project.stats.sceneCount;
     if (actorCount) actorCount.textContent = project.stats.actorCount;
     if (scriptCount) scriptCount.textContent = project.stats.scriptCount;
 
-    this.showScreen('title');
+    console.log('Screen Manager: About to show title screen');
+    this.showScreen('titleScreen');
   }
 
   /**
    * Show specific screen
    */
   showScreen(screenName) {
+    console.log('Screen Manager: Showing screen:', screenName);
+    
     // Hide all screens
     Object.keys(this.screens).forEach(name => {
       const screen = this.screens[name];
       if (screen) {
         if (name === 'editor') {
           screen.style.display = 'none';
+          screen.classList.add('hidden');
         } else {
           screen.classList.remove('active');
         }
@@ -450,11 +489,36 @@ class ScreenManager {
     const screen = this.screens[screenName];
     if (screen) {
       if (screenName === 'editor') {
+        console.log('Screen Manager: Setting editor display to flex');
+        screen.classList.remove('hidden');
         screen.style.display = 'flex';
+        screen.style.flexDirection = 'column';
+        screen.style.height = '100vh';
+        screen.style.width = '100%';
+        
+        // Make sure all content is visible
+        setTimeout(() => {
+          const mainContent = screen.querySelector('.main-content');
+          const menubar = screen.querySelector('.menubar');
+          const tabToolbar = screen.querySelector('.tab-toolbar');
+          
+          if (mainContent) {
+            console.log('Screen Manager: Main content element found');
+            mainContent.style.display = 'flex';
+          } else {
+            console.warn('Screen Manager: Main content element not found');
+          }
+          
+          if (menubar) menubar.style.display = 'flex';
+          if (tabToolbar) tabToolbar.style.display = 'flex';
+        }, 50);
       } else {
         screen.classList.add('active');
       }
       this.currentScreen = screenName;
+      console.log('Screen Manager: Screen shown successfully:', screenName);
+    } else {
+      console.error('Screen Manager: Screen not found:', screenName);
     }
   }
 
@@ -482,13 +546,19 @@ class ScreenManager {
    * Open editor
    */
   openEditor() {
+    console.log('Screen Manager: Opening editor...');
+    const project = this.projectSystem ? this.projectSystem.getCurrentProject() : null;
+    console.log('Screen Manager: Current project:', project ? project.name : 'None');
+    
     this.showScreen('editor');
     
     // Dispatch event to notify other systems
     const event = new CustomEvent('editorOpened', {
-      detail: { project: this.projectSystem.getCurrentProject() }
+      detail: { project: project }
     });
     window.dispatchEvent(event);
+    
+    console.log('Screen Manager: Editor opened, event dispatched');
   }
 
   /**
@@ -503,11 +573,37 @@ class ScreenManager {
 if (typeof window !== 'undefined') {
   window.ScreenManager = ScreenManager;
   
-  // Auto-start when page loads
-  window.addEventListener('load', () => {
+  // Auto-start when page loads - try multiple events for reliability
+  function initScreenManager() {
     if (!window.screenManager) {
-      window.screenManager = new ScreenManager();
-      window.screenManager.start();
+      console.log('Screen Manager: Initializing...');
+      try {
+        window.screenManager = new ScreenManager();
+        window.screenManager.start();
+        console.log('Screen Manager: Started successfully');
+      } catch (error) {
+        console.error('Screen Manager: Initialization failed:', error);
+        // Fallback: show a visible error message
+        document.body.innerHTML = `
+          <div style="padding: 40px; font-family: monospace; color: #ff6b6b;">
+            <h1>⚠️ Initialization Error</h1>
+            <p>Screen Manager failed to initialize.</p>
+            <pre style="background: #f1f1f1; padding: 20px; color: #000; overflow: auto;">${error.message}\n\n${error.stack}</pre>
+            <p>Check browser console (F12) for more details.</p>
+          </div>
+        `;
+      }
     }
-  });
+  }
+  
+  // Try DOMContentLoaded first (earlier)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScreenManager);
+  } else {
+    // DOM already loaded
+    initScreenManager();
+  }
+  
+  // Backup: also listen to window load
+  window.addEventListener('load', initScreenManager);
 }
