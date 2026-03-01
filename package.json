@@ -1,0 +1,49 @@
+{
+  "name": "labyrinth-of-the-dragon",
+  "version": "1.0.0",
+  "description": "Game Boy Color RPG Game - Labyrinth of the Dragon",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npx tsc src-ts/index.ts src-ts/ability.ts src-ts/battle.ts src-ts/core.ts src-ts/item.ts src-ts/map.ts src-ts/monster.ts src-ts/player.ts src-ts/save.ts src-ts/textbox.ts src-ts/utils.ts --outDir dist --module commonjs --target ES2020 --declaration --sourceMap",
+    "build:watch": "tsc --watch",
+    "start": "npm run build && node dist/index.js",
+    "dev": "ts-node index.ts",
+    "tools": "ts-node cli.ts",
+    "clean": "rimraf dist obj LabyrinthOfTheDragon.gbc output",
+    "test": "echo \"No tests specified\" && exit 0",
+    "format": "prettier --write \"**/*.{ts,js,json}\"",
+    "lint": "eslint \"**/*.ts\"",
+    "build-game": "npm run tools build",
+    "convert-assets": "npm run tools convert-png ./assets/tiles ./data && npm run tools convert-map ./res/maps ./data",
+    "build-exe": "npx -y @yao-pkg/pkg@5.11.5 compile-cli.js --output compile.exe --targets node18-win-x64",
+    "setup-output": "node setup-output.js",
+    "web": "node server.js",
+    "web:dev": "node server.js"
+  },
+  "keywords": [
+    "gameboy",
+    "gbc",
+    "rpg",
+    "game"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/pngjs": "^6.0.5",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

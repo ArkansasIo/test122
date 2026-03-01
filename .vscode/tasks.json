@@ -1,0 +1,75 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build: TypeScript",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "problemMatcher": ["$tsc"],
+      "isBackground": false,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Build: All",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-ExecutionPolicy", "Bypass", "-File", "./compile.ps1", "-Target", "all"],
+      "problemMatcher": ["$tsc"],
+      "isBackground": false,
+      "group": "build"
+    },
+    {
+      "label": "Build: Watch",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build:watch"],
+      "isBackground": true,
+      "group": "build",
+      "problemMatcher": {
+        "pattern": "$tsc-watch",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Starting compilation.*$",
+          "endsPattern": "^.*Compilation complete.*$"
+        }
+      }
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "clean"],
+      "group": "build"
+    },
+    {
+      "label": "Start Dev Server",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "isBackground": true,
+      "group": "test",
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Format Code",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "format"],
+      "group": "none"
+    },
+    {
+      "label": "Lint Code",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "lint"],
+      "group": "none",
+      "problemMatcher": ["$eslint-stylish"]
+    }
+  ]
+}
