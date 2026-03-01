@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -64,7 +65,14 @@ function createAppServer() {
   const p = parsed.pathname;
 
   if (p === '/' || p === '/index.html') {
-    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
+    // Redirect to new Dragon Studio
+    res.writeHead(301, { 'Location': '/studio' });
+    res.end();
+    return;
+  }
+
+  if (p === '/studio' || p === '/studio.html') {
+    return serveFile(res, path.join(ROOT_DIR, 'src/client/studio.html'));
   }
 
   if (p.startsWith('/api/')) {

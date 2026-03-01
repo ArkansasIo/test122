@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 /**
  * Labyrinth of the Dragon - IDE Editor Launcher
@@ -7,7 +8,6 @@
 
 const { spawn } = require('child_process');
 const path = require('path');
-const fs = require('fs');
 const os = require('os');
 
 const APP_NAME = 'Labyrinth of the Dragon IDE';
