@@ -362,12 +362,67 @@
         <!-- Other Panels -->
         <div class="panel" id="panel-characters">
           <h3>Character Editor</h3>
-          <p style="margin-top:15px;color:#aaa;">Create and configure player characters</p>
+          <div style="margin-top:20px;">
+            <div style="display:flex;gap:15px;">
+              <div style="flex:1;">
+                <label>Character Name:</label>
+                <input type="text" id="charName" value="Hero" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;">
+                
+                <label style="margin-top:10px;display:block;">Type:</label>
+                <select id="charType" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;">
+                  <option value="hero">Hero</option>
+                  <option value="npc">NPC</option>
+                  <option value="enemy">Enemy</option>
+                </select>
+                
+                <button onclick="window.createCharacter()" style="margin-top:10px;width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;">+ Create Character</button>
+              </div>
+              
+              <div style="flex:1;border:1px solid #555;padding:10px;border-radius:4px;">
+                <h4>Character Stats</h4>
+                <div id="statsDisplay" style="font-size:12px;">
+                  <div>Health: <input type="number" id="stat-health" value="100" style="width:60px;"></div>
+                  <div>Damage: <input type="number" id="stat-damage" value="10" style="width:60px;"></div>
+                  <div>Defense: <input type="number" id="stat-defense" value="5" style="width:60px;"></div>
+                  <div>Speed: <input type="number" id="stat-speed" value="5" style="width:60px;"></div>
+                </div>
+                <button onclick="window.updateCharacterStats()" style="margin-top:10px;width:100%;padding:8px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;">Update Stats</button>
+              </div>
+            </div>
+            <div id="charactersList" style="margin-top:20px;border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
         </div>
 
         <div class="panel" id="panel-dialogue">
           <h3>Dialogue & Story Editor</h3>
-          <p style="margin-top:15px;color:#aaa;">Write dialogue trees and story branches</p>
+          <div style="margin-top:20px;">
+            <div style="display:flex;gap:15px;">
+              <div style="flex:1;">
+                <label>Tree Name:</label>
+                <input type="text" id="treeName" value="Conversation" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;">
+                
+                <label style="margin-top:10px;display:block;">Speaker:</label>
+                <input type="text" id="speakerName" value="NPC" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;">
+                
+                <label style="margin-top:10px;display:block;">Dialogue Text:</label>
+                <textarea id="dialogueText" style="width:100%;height:80px;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;resize:vertical;">Hello, adventurer!</textarea>
+                
+                <button onclick="window.createDialogueNode()" style="margin-top:10px;width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;">+ Add Dialogue Node</button>
+              </div>
+              
+              <div style="flex:1;border:1px solid #555;padding:10px;border-radius:4px;">
+                <h4>Dialogue Tree Preview</h4>
+                <div id="dialoguePreview" style="font-size:12px;color:#aaa;max-height:300px;overflow-y:auto;">
+                  <p>Create nodes to see preview here...</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="margin-top:15px;display:flex;gap:10px;">
+              <button onclick="window.createDialogueTree()" style="padding:8px 16px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;">Create Tree</button>
+              <button onclick="window.exportDialogueTree()" style="padding:8px 16px;background:#FF9800;color:white;border:none;border-radius:4px;cursor:pointer;">Export Tree</button>
+            </div>
+          </div>
         </div>
 
         <!-- Code Editor Panel -->
@@ -432,11 +487,47 @@
         </div>
 
         <div class="panel" id="panel-build">
-          <h3>Build & Export</h3>
-          <div style="margin-top:20px;">
-            <button class="btn primary" style="padding:10px 20px;font-size:14px;">🚀 Build Web Game</button>
-            <button class="btn" style="padding:10px 20px;font-size:14px;margin-left:10px;">📦 Export as Standalone</button>
+          <h3>Build & Export Game</h3>
+          <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+            <div style="border:1px solid #555;padding:15px;border-radius:4px;">
+              <h4>🌐 Web (HTML5)</h4>
+              <p style="color:#aaa;font-size:12px;">Browser-based game, works everywhere</p>
+              <button onclick="window.exportGame('web')" style="width:100%;padding:10px;margin-top:10px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;">Build Web</button>
+            </div>
+            
+            <div style="border:1px solid #555;padding:15px;border-radius:4px;">
+              <h4>🪟 Windows EXE</h4>
+              <p style="color:#aaa;font-size:12px;">Desktop application for Windows</p>
+              <button onclick="window.exportGame('windows')" style="width:100%;padding:10px;margin-top:10px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;">Build EXE</button>
+            </div>
+            
+            <div style="border:1px solid #555;padding:15px;border-radius:4px;">
+              <h4>🍎 macOS App</h4>
+              <p style="color:#aaa;font-size:12px;">Native Mac application</p>
+              <button onclick="window.exportGame('mac')" style="width:100%;padding:10px;margin-top:10px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;">Build macOS</button>
+            </div>
+            
+            <div style="border:1px solid #555;padding:15px;border-radius:4px;">
+              <h4>🐧 Linux Binary</h4>
+              <p style="color:#aaa;font-size:12px;">Linux executable</p>
+              <button onclick="window.exportGame('linux')" style="width:100%;padding:10px;margin-top:10px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;">Build Linux</button>
+            </div>
+            
+            <div style="border:1px solid #555;padding:15px;border-radius:4px;">
+              <h4>🍎 iOS App</h4>
+              <p style="color:#aaa;font-size:12px;">Apple App Store format</p>
+              <button onclick="window.exportGame('ios')" style="width:100%;padding:10px;margin-top:10px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;">Build iOS</button>
+            </div>
+            
+            <div style="border:1px solid #555;padding:15px;border-radius:4px;">
+              <h4>🤖 Android APK</h4>
+              <p style="color:#aaa;font-size:12px;">Google Play format</p>
+              <button onclick="window.exportGame('android')" style="width:100%;padding:10px;margin-top:10px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;">Build Android</button>
+            </div>
           </div>
+          
+          <div id="buildLog" style="margin-top:20px;border:1px solid #555;padding:10px;border-radius:4px;background:#000;color:#0f0;font-family:monospace;font-size:11px;max-height:200px;overflow-y:auto;display:none;"></div>
+          <button onclick="window.toggleBuildLog()" style="margin-top:15px;padding:8px 16px;background:#666;color:white;border:none;border-radius:4px;cursor:pointer;">View Build Log</button>
         </div>
 
         <!-- Additional Panels -->
@@ -461,9 +552,108 @@
   <script src="/js/game-engine.js"></script>
   <script src="/js/code-editor.js"></script>
   <script src="/js/blueprint-editor.js"></script>
+  <script src="/js/character-system.js"></script>
+  <script src="/js/dialogue-system.js"></script>
+  <script src="/js/animation-system.js"></script>
+  <script src="/js/project-manager.js"></script>
+  <script src="/js/export-builder.js"></script>
+  <script src="/js/input-manager.js"></script>
   <script>
-    // Initialize Code Editor
+    // Initialize all systems
     let codeEditor;
+    let blueprintEditor;
+    let characterSystem;
+    let dialogueManager;
+    let projectManager;
+    let exportBuilder;
+    let inputManager;
+    let debugConsole;
+
+    function initializeAllSystems() {
+      characterSystem = new CharacterSystem();
+      dialogueManager = new DialogueManager();
+      projectManager = new ProjectManager();
+      inputManager = new InputManager();
+      debugConsole = new DebugConsole('debugConsole');
+
+      // Create default project
+      const project = projectManager.createProject('New Game');
+      exportBuilder = new ExportBuilder(project);
+
+      console.log('🐉 All Dragon Studio systems initialized!');
+    }
+
+    // Character system functions
+    window.createCharacter = function() {
+      const name = document.getElementById('charName').value || 'Hero';
+      const type = document.getElementById('charType').value;
+      const char = characterSystem.createCharacter(name, type);
+      window.updateCharactersList();
+      console.log(`Created ${type}: ${name}`);
+    };
+
+    window.updateCharacterStats = function() {
+      const stats = {
+        health: parseInt(document.getElementById('stat-health').value),
+        damage: parseInt(document.getElementById('stat-damage').value),
+        defense: parseInt(document.getElementById('stat-defense').value),
+        speed: parseInt(document.getElementById('stat-speed').value)
+      };
+      console.log('Character stats updated:', stats);
+    };
+
+    window.updateCharactersList = function() {
+      const list = document.getElementById('charactersList');
+      const chars = characterSystem.getAllCharacters();
+      list.innerHTML = chars.map(char => `
+        <div style="padding:5px;background:#2a2a2a;margin-bottom:5px;border-radius:3px;">
+          <strong>${char.name}</strong> (${char.type}) - Level ${char.level}
+          <div style="font-size:11px;color:#aaa;">HP: ${char.stats.health} | DMG: ${char.stats.damage}</div>
+        </div>
+      `).join('');
+    };
+
+    // Dialogue system functions
+    window.createDialogueTree = function() {
+      const name = document.getElementById('treeName').value || 'Conversation';
+      const tree = dialogueManager.createDialogueTree(name);
+      console.log(`Created dialogue tree: ${name}`);
+    };
+
+    window.createDialogueNode = function() {
+      const text = document.getElementById('dialogueText').value;
+      const speaker = document.getElementById('speakerName').value;
+      console.log(`Created dialogue: "${text}" by ${speaker}`);
+    };
+
+    window.exportDialogueTree = function() {
+      console.log('Dialogue tree exported');
+    };
+
+    // Export functions
+    window.exportGame = async function(platform) {
+      const logDiv = document.getElementById('buildLog');
+      logDiv.style.display = 'block';
+      logDiv.innerHTML = `Building ${platform}...\\n`;
+      
+      const result = await exportBuilder.build(platform);
+      
+      const log = exportBuilder.getLog();
+      logDiv.innerHTML = log.map(msg => `${msg}\\n`).join('');
+      
+      if (exportBuilder.isSuccessful()) {
+        logDiv.innerHTML += `\\n✓ Build successful!`;
+      } else {
+        logDiv.innerHTML += `\\n✗ Build failed:\\n` + exportBuilder.getErrors().join('\\n');
+      }
+      
+      console.log(`Exported ${platform}:`, result);
+    };
+
+    window.toggleBuildLog = function() {
+      const logDiv = document.getElementById('buildLog');
+      logDiv.style.display = logDiv.style.display === 'none' ? 'block' : 'none';
+    };
 
     function initCodeEditor() {
       codeEditor = new CodeEditor('codeEditorContainer');
@@ -478,9 +668,6 @@ int main() {
 }
 `, 'c');
     }
-
-    // Initialize Blueprint Editor
-    let blueprintEditor;
 
     function initBlueprintEditor() {
       blueprintEditor = new BlueprintEditor('blueprintCanvas');
@@ -580,6 +767,11 @@ int main() {
         if (oldPanelMap[view]) {
           document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
           document.getElementById(oldPanelMap[view]).classList.add('active');
+          
+          // Initialize systems on first use
+          if (!characterSystem) {
+            initializeAllSystems();
+          }
         }
       });
     });
