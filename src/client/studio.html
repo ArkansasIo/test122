@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dragon Studio - Visual Game Creator</title>
+  <link rel="stylesheet" href="/css/editors.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -286,6 +287,8 @@
       <div class="section-item" data-view="dialogue">Dialogue & Story</div>
       
       <div class="section-title">⚙️ Advanced</div>
+      <div class="section-item" data-view="code-editor">💻 Code Editor</div>
+      <div class="section-item" data-view="blueprint-scripting">🎨 Blueprint Scripting</div>
       <div class="section-item" data-view="scripting">Scripting</div>
       <div class="section-item" data-view="export-settings">Export Settings</div>
       <div class="section-item" data-view="build">Build & Test</div>
@@ -294,6 +297,8 @@
     <div class="main-content">
       <div class="tabs">
         <div class="tab active" data-panel="main">Main</div>
+        <div class="tab" data-panel="code-editor">Code Editor</div>
+        <div class="tab" data-panel="blueprint-editor">Blueprint Scripting</div>
         <div class="tab" data-panel="preview">Preview</div>
         <div class="tab" data-panel="resources">Resources</div>
         <div class="tab" data-panel="console">Console</div>
@@ -365,6 +370,67 @@
           <p style="margin-top:15px;color:#aaa;">Write dialogue trees and story branches</p>
         </div>
 
+        <!-- Code Editor Panel -->
+        <div class="panel" id="panel-code-editor">
+          <div id="codeEditorContainer" style="height:100%;"></div>
+        </div>
+
+        <!-- Blueprint Editor Panel -->
+        <div class="panel" id="panel-blueprint-editor">
+          <div class="blueprint-editor-container">
+            <div class="blueprint-toolbar">
+              <button id="addEventNode">+ Event Node</button>
+              <button id="addFunctionNode">+ Function Node</button>
+              <button id="addVariableNode">+ Variable Node</button>
+              <button id="addMathNode">+ Math Node</button>
+              <button id="deleteNode">🗑️ Delete</button>
+              <button id="exportBlueprint">📤 Export Code</button>
+            </div>
+            <div style="display:flex;flex:1;">
+              <div class="blueprint-nodes-panel">
+                <div class="node-category">
+                  <div class="node-category-title">📍 Events</div>
+                  <div class="node-item event" data-node-type="event">Begin Play</div>
+                  <div class="node-item event" data-node-type="event">Update</div>
+                  <div class="node-item event" data-node-type="event">On Collision</div>
+                  <div class="node-item event" data-node-type="event">On Input</div>
+                </div>
+                <div class="node-category">
+                  <div class="node-category-title">⚙️ Functions</div>
+                  <div class="node-item function" data-node-type="function">Print String</div>
+                  <div class="node-item function" data-node-type="function">Delay</div>
+                  <div class="node-item function" data-node-type="function">Spawn Actor</div>
+                </div>
+                <div class="node-category">
+                  <div class="node-category-title">📊 Variables</div>
+                  <div class="node-item variable" data-node-type="variable">Get Variable</div>
+                  <div class="node-item variable" data-node-type="variable">Set Variable</div>
+                </div>
+                <div class="node-category">
+                  <div class="node-category-title">🔢 Math</div>
+                  <div class="node-item math" data-node-type="math">Add</div>
+                  <div class="node-item math" data-node-type="math">Subtract</div>
+                  <div class="node-item math" data-node-type="math">Multiply</div>
+                  <div class="node-item math" data-node-type="math">Divide</div>
+                </div>
+              </div>
+              <div class="blueprint-canvas-container">
+                <canvas id="blueprintCanvas" width="800" height="600"></canvas>
+              </div>
+              <div class="blueprint-properties">
+                <h4 style="margin-bottom:10px;color:#dcdcaa;">Node Properties</h4>
+                <div id="nodePropertiesPanel">
+                  <p style="color:#888;font-size:12px;">Select a node to edit properties</p>
+                </div>
+              </div>
+            </div>
+            <div class="blueprint-controls">
+              <span id="blueprintStatus">Ready</span>
+              <span>Nodes: <span id="nodeCount">2</span> | Connections: <span id="connCount">0</span></span>
+            </div>
+          </div>
+        </div>
+
         <div class="panel" id="panel-build">
           <h3>Build & Export</h3>
           <div style="margin-top:20px;">
@@ -372,11 +438,138 @@
             <button class="btn" style="padding:10px 20px;font-size:14px;margin-left:10px;">📦 Export as Standalone</button>
           </div>
         </div>
+
+        <!-- Additional Panels -->
+        <div class="panel" id="panel-preview" style="display:none;">
+          <h3>Preview</h3>
+          <canvas id="previewCanvas" width="800" height="600" style="border:1px solid #555;display:block;margin-top:15px;"></canvas>
+        </div>
+
+        <div class="panel" id="panel-resources" style="display:none;">
+          <h3>Resources</h3>
+          <p style="margin-top:15px;color:#aaa;">Manage game assets and resources</p>
+        </div>
+
+        <div class="panel" id="panel-console" style="display:none;">
+          <h3>Console</h3>
+          <div id="consoleOutput" style="background:#000;color:#0f0;padding:15px;margin-top:15px;border-radius:4px;font-family:monospace;font-size:12px;max-height:400px;overflow-y:auto;"></div>
+        </div>
       </div>
     </div>
   </div>
 
+  <script src="/js/game-engine.js"></script>
+  <script src="/js/code-editor.js"></script>
+  <script src="/js/blueprint-editor.js"></script>
   <script>
+    // Initialize Code Editor
+    let codeEditor;
+
+    function initCodeEditor() {
+      codeEditor = new CodeEditor('codeEditorContainer');
+      codeEditor.setCode(`// Welcome to Code Editor
+// Supports: C, C++, Assembly, TypeScript, JavaScript
+
+#include <stdio.h>
+
+int main() {
+    printf("Hello from Dragon Studio!\\n");
+    return 0;
+}
+`, 'c');
+    }
+
+    // Initialize Blueprint Editor
+    let blueprintEditor;
+
+    function initBlueprintEditor() {
+      blueprintEditor = new BlueprintEditor('blueprintCanvas');
+      updateBlueprintStats();
+      setupBlueprintToolbar();
+      renderBlueprint();
+    }
+
+    function updateBlueprintStats() {
+      document.getElementById('nodeCount').textContent = blueprintEditor.nodes.size;
+      document.getElementById('connCount').textContent = blueprintEditor.connections.length;
+    }
+
+    function setupBlueprintToolbar() {
+      document.getElementById('addEventNode').addEventListener('click', () => {
+        const node = blueprintEditor.addNode('event', 'Event Node', 100, 100);
+        blueprintEditor.draw();
+        updateBlueprintStats();
+      });
+
+      document.getElementById('addFunctionNode').addEventListener('click', () => {
+        const node = blueprintEditor.addNode('function', 'Function Node', 100, 100);
+        blueprintEditor.draw();
+        updateBlueprintStats();
+      });
+
+      document.getElementById('addVariableNode').addEventListener('click', () => {
+        const node = blueprintEditor.addNode('variable', 'Variable Node', 100, 100);
+        blueprintEditor.draw();
+        updateBlueprintStats();
+      });
+
+      document.getElementById('addMathNode').addEventListener('click', () => {
+        const node = blueprintEditor.addNode('math', 'Math Operation', 100, 100);
+        blueprintEditor.draw();
+        updateBlueprintStats();
+      });
+
+      document.getElementById('deleteNode').addEventListener('click', () => {
+        if (blueprintEditor.selectedNode) {
+          blueprintEditor.nodes.delete(blueprintEditor.selectedNode.id);
+          blueprintEditor.selectedNode = null;
+          blueprintEditor.draw();
+          updateBlueprintStats();
+        }
+      });
+
+      document.getElementById('exportBlueprint').addEventListener('click', () => {
+        const cppCode = blueprintEditor.exportToCode('cpp');
+        console.log('Exported C++ Code:', cppCode);
+        alert('Blueprint exported to console. Check developer tools (F12) for output.');
+      });
+    }
+
+    function renderBlueprint() {
+      if (blueprintEditor) {
+        blueprintEditor.draw();
+      }
+    }
+
+    // Initialize when panels are shown
+    const observer = new MutationObserver(() => {
+      const codePanel = document.getElementById('panel-code-editor');
+      const bpPanel = document.getElementById('panel-blueprint-editor');
+      
+      if (codePanel && codePanel.classList.contains('active') && !codeEditor) {
+        initCodeEditor();
+      }
+      
+      if (bpPanel && bpPanel.classList.contains('active') && !blueprintEditor) {
+        initBlueprintEditor();
+        setInterval(renderBlueprint, 16); // 60 FPS render loop
+      }
+    });
+
+    observer.observe(document.body, { attributes: true, subtree: true });
+
+    // Update panel map
+    const oldPanelMap = {
+      'dashboard': 'panel-dashboard',
+      'tile-editor': 'panel-tile-editor',
+      'map-builder': 'panel-map-builder',
+      'characters': 'panel-characters',
+      'dialogue': 'panel-dialogue',
+      'code-editor': 'panel-code-editor',
+      'blueprint-scripting': 'panel-blueprint-editor',
+      'build': 'panel-build'
+    };
+
     // Sidebar navigation
     document.querySelectorAll('.section-item').forEach(item => {
       item.addEventListener('click', function() {
@@ -384,28 +577,43 @@
         document.querySelectorAll('.section-item').forEach(i => i.classList.remove('active'));
         this.classList.add('active');
         
-        // Map views to panels
-        const panelMap = {
-          'dashboard': 'panel-dashboard',
-          'tile-editor': 'panel-tile-editor',
-          'map-builder': 'panel-map-builder',
-          'characters': 'panel-characters',
-          'dialogue': 'panel-dialogue',
-          'build': 'panel-build'
-        };
-        
-        if (panelMap[view]) {
+        if (oldPanelMap[view]) {
           document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-          document.getElementById(panelMap[view]).classList.add('active');
+          document.getElementById(oldPanelMap[view]).classList.add('active');
         }
       });
     });
-
-    // Tab switching
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', function() {
+        const panelId = this.dataset.panel;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        
         this.classList.add('active');
+        
+        // Map tabs to panels
+        const tabPanelMap = {
+          'main': 'panel-dashboard',
+          'code-editor': 'panel-code-editor',
+          'blueprint-editor': 'panel-blueprint-editor',
+          'preview': 'panel-preview',
+          'resources': 'panel-resources',
+          'console': 'panel-console'
+        };
+        
+        if (tabPanelMap[panelId]) {
+          const panelEl = document.getElementById(tabPanelMap[panelId]);
+          if (panelEl) {
+            panelEl.classList.add('active');
+            // Trigger initialization if needed
+            if (panelId === 'code-editor' && !codeEditor) {
+              initCodeEditor();
+            }
+            if (panelId === 'blueprint-editor' && !blueprintEditor) {
+              initBlueprintEditor();
+            }
+          }
+        }
       });
     });
 
