@@ -65,13 +65,13 @@ function createAppServer() {
   const p = parsed.pathname;
 
   if (p === '/' || p === '/index.html') {
-    // Serve classic tab-based interface (default)
-    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
+    // Serve full Unreal Engine-style 4-panel interface (default)
+    return serveFile(res, path.join(ROOT_DIR, 'unreal-studio.html'));
   }
 
-  if (p === '/unreal' || p === '/unreal.html') {
-    // Unreal Engine-style 4-panel interface
-    return serveFile(res, path.join(ROOT_DIR, 'unreal-studio.html'));
+  if (p === '/classic' || p === '/classic.html') {
+    // Classic tab-based interface
+    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
   }
 
   if (p === '/studio' || p === '/studio.html') {
