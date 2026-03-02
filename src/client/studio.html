@@ -292,6 +292,24 @@
       <div class="section-item" data-view="scripting">Scripting</div>
       <div class="section-item" data-view="export-settings">Export Settings</div>
       <div class="section-item" data-view="build">Build & Test</div>
+
+      <div class="section-title">✨ Visual Effects</div>
+      <div class="section-item" data-view="particles">Particle Effects</div>
+      <div class="section-item" data-view="audio">Audio Manager</div>
+
+      <div class="section-title">🗺️ World Building</div>
+      <div class="section-item" data-view="tilemap">Tilemap Editor</div>
+      <div class="section-item" data-view="scene">Scene Editor</div>
+
+      <div class="section-title">🤖 AI & Logic</div>
+      <div class="section-item" data-view="ai-trees">AI Behavior Trees</div>
+
+      <div class="section-title">💾 Data Management</div>
+      <div class="section-item" data-view="save-manager">Save Game Manager</div>
+      <div class="section-item" data-view="sprites">Sprite Sheet Editor</div>
+
+      <div class="section-title">🌍 Localization</div>
+      <div class="section-item" data-view="localization">Language Manager</div>
     </div>
 
     <div class="main-content">
@@ -545,6 +563,169 @@
           <h3>Console</h3>
           <div id="consoleOutput" style="background:#000;color:#0f0;padding:15px;margin-top:15px;border-radius:4px;font-family:monospace;font-size:12px;max-height:400px;overflow-y:auto;"></div>
         </div>
+
+        <!-- Particle Effects Panel -->
+        <div class="panel" id="panel-particles">
+          <h3>Particle Effects</h3>
+          <div style="margin-top:20px;">
+            <label>Effect Type:</label>
+            <select id="effectType" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+              <option>explosion</option>
+              <option>fire</option>
+              <option>magic</option>
+              <option>dust</option>
+              <option>healing</option>
+              <option>blood</option>
+              <option>sparkle</option>
+              <option>smoke</option>
+            </select>
+            <label>Emission Rate:</label>
+            <input type="range" id="emissionRate" min="1" max="100" value="20" style="width:100%;margin-bottom:10px;">
+            <label>Particle Size:</label>
+            <input type="range" id="particleSize" min="1" max="20" value="5" style="width:100%;margin-bottom:10px;">
+            <button onclick="window.createParticleEmitter()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;">Create Emitter</button>
+            <div id="particlesList" style="margin-top:15px;border:1px solid #555;padding:10px;border-radius:4px;"></div>
+          </div>
+        </div>
+
+        <!-- Audio Manager Panel -->
+        <div class="panel" id="panel-audio">
+          <h3>Audio Manager</h3>
+          <div style="margin-top:20px;">
+            <label>Audio Track Name:</label>
+            <input type="text" id="audioTrackName" placeholder="background_music" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Audio URL:</label>
+            <input type="text" id="audioURL" placeholder="/audio/music.mp3" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Track Type:</label>
+            <select id="audioType" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+              <option value="music">Music</option>
+              <option value="sfx">Sound Effect</option>
+              <option value="ui">UI Sound</option>
+              <option value="ambient">Ambient</option>
+            </select>
+            <button onclick="window.addAudioTrack()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">+ Add Track</button>
+            <label>Master Volume:</label>
+            <input type="range" id="masterVolume" min="0" max="100" value="100" style="width:100%;margin-bottom:10px;">
+            <div id="tracksList" style="border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- Tilemap Editor Panel -->
+        <div class="panel" id="panel-tilemap">
+          <h3>Tilemap Editor</h3>
+          <div style="margin-top:20px;">
+            <label>Map Name:</label>
+            <input type="text" id="tilemapName" value="Level 1" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Map Width (tiles):</label>
+            <input type="number" id="mapWidth" value="20" min="5" max="100" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Map Height (tiles):</label>
+            <input type="number" id="mapHeight" value="15" min="5" max="100" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Tile Size (px):</label>
+            <input type="number" id="tileSize" value="32" min="16" max="64" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <button onclick="window.createNewTilemap()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;">Create Tilemap</button>
+            <div id="tilemapsList" style="margin-top:15px;border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- Scene Editor Panel -->
+        <div class="panel" id="panel-scene">
+          <h3>Scene Editor</h3>
+          <div style="margin-top:20px;">
+            <label>Scene Name:</label>
+            <input type="text" id="sceneName" value="Main Scene" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Scene Width:</label>
+            <input type="number" id="sceneWidth" value="1280" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Scene Height:</label>
+            <input type="number" id="sceneHeight" value="720" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <button onclick="window.createNewScene()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">+ Create Scene</button>
+            <label>Object Type:</label>
+            <select id="objectType" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+              <option>sprite</option>
+              <option>text</option>
+              <option>shape</option>
+              <option>light</option>
+            </select>
+            <button onclick="window.addSceneObject()" style="width:100%;padding:8px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;">+ Add Object</button>
+            <div id="scenesList" style="margin-top:15px;border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- AI Behavior Trees Panel -->
+        <div class="panel" id="panel-ai-trees">
+          <h3>AI Behavior Trees</h3>
+          <div style="margin-top:20px;">
+            <label>Agent Name:</label>
+            <input type="text" id="agentName" placeholder="Enemy_1" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <button onclick="window.createAIAgent()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">+ Create Agent</button>
+            <label>Node Type:</label>
+            <select id="nodeType" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+              <option>sequence</option>
+              <option>selector</option>
+              <option>action</option>
+              <option>condition</option>
+              <option>wait</option>
+            </select>
+            <button onclick="window.addBehaviorNode()" style="width:100%;padding:8px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;">+ Add Node</button>
+            <div id="agentsList" style="margin-top:15px;border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- Save Game Manager Panel -->
+        <div class="panel" id="panel-save-manager">
+          <h3>Save Game Manager</h3>
+          <div style="margin-top:20px;">
+            <label>Save Slot:</label>
+            <select id="saveSlotSelect" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+            <button onclick="window.quickSave()" style="width:100%;padding:8px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">💾 Quick Save</button>
+            <button onclick="window.quickLoad()" style="width:100%;padding:8px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">📁 Quick Load</button>
+            <button onclick="window.autosaveToggle()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">Auto Save</button>
+            <div id="saveSlotsList" style="margin-top:15px;border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- Sprite Sheet Editor Panel -->
+        <div class="panel" id="panel-sprites">
+          <h3>Sprite Sheet Editor</h3>
+          <div style="margin-top:20px;">
+            <label>Sprite Name:</label>
+            <input type="text" id="spriteName" placeholder="player_idle" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Image URL:</label>
+            <input type="text" id="spriteImageURL" placeholder="/assets/sprite.png" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Tile Width (px):</label>
+            <input type="number" id="spriteWidth" value="32" min="8" max="256" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Tile Height (px):</label>
+            <input type="number" id="spriteHeight" value="32" min="8" max="256" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <button onclick="window.createNewSprite()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">+ Create Sprite</button>
+            <label>Generate Frames:</label>
+            <input type="number" id="framesPerRow" value="8" min="1" max="32" placeholder="Frames per row" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <button onclick="window.generateSpriteFrames()" style="width:100%;padding:8px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;">Generate Frames</button>
+            <div id="spritesList" style="margin-top:15px;border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- Localization Panel -->
+        <div class="panel" id="panel-localization">
+          <h3>Language Manager</h3>
+          <div style="margin-top:20px;">
+            <label>Language Code:</label>
+            <input type="text" id="langCode" placeholder="en" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Language Name:</label>
+            <input type="text" id="langName" placeholder="English" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <button onclick="window.registerLanguage()" style="width:100%;padding:8px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;margin-bottom:10px;">+ Add Language</button>
+            <label>String Key:</label>
+            <input type="text" id="stringKey" placeholder="UI_START_BUTTON" style="width:100%;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;margin-bottom:10px;">
+            <label>Translation:</label>
+            <textarea id="stringTranslation" placeholder="Start Game" style="width:100%;height:60px;padding:5px;background:#2a2a2a;border:1px solid #555;color:#ddd;resize:vertical;margin-bottom:10px;"></textarea>
+            <button onclick="window.addTranslatestring()" style="width:100%;padding:8px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;">+ Add Translation</button>
+            <div id="languagesList" style="margin-top:15px;border:1px solid #555;padding:10px;border-radius:4px;max-height:300px;overflow-y:auto;"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -558,6 +739,14 @@
   <script src="/js/project-manager.js"></script>
   <script src="/js/export-builder.js"></script>
   <script src="/js/input-manager.js"></script>
+  <script src="/js/particle-system.js"></script>
+  <script src="/js/audio-system.js"></script>
+  <script src="/js/tilemap-editor.js"></script>
+  <script src="/js/ai-behavior-tree.js"></script>
+  <script src="/js/scene-editor.js"></script>
+  <script src="/js/save-game-manager.js"></script>
+  <script src="/js/sprite-sheet-editor.js"></script>
+  <script src="/js/localization-system.js"></script>
   <script>
     // Initialize all systems
     let codeEditor;
@@ -728,6 +917,218 @@ int main() {
       }
     }
 
+    // Particle Effects Functions
+    let particleSystem = null;
+    window.createParticleEmitter = function() {
+      if (!particleSystem) {
+        particleSystem = new ParticleSystem();
+      }
+      const effectType = document.getElementById('effectType').value;
+      const emitter = particleSystem.createEmitter(100, 100, effectType);
+      console.log(`Created ${effectType} particle emitter`);
+      updateParticlesList();
+    };
+    function updateParticlesList() {
+      if (!particleSystem) return;
+      const list = document.getElementById('particlesList');
+      const stats = `Active Emitters: ${particleSystem.getEmitterCount()} | Total Particles: ${particleSystem.getTotalParticleCount()}`;
+      list.innerHTML = `<div style="color:#aaa;">${stats}</div>`;
+    }
+
+    // Audio System Functions
+    let audioSystem = null;
+    window.addAudioTrack = function() {
+      if (!audioSystem) {
+        audioSystem = new AudioSystem();
+        audioSystem.init();
+      }
+      const name = document.getElementById('audioTrackName').value || 'track';
+      const url = document.getElementById('audioURL').value || '/audio/default.mp3';
+      const type = document.getElementById('audioType').value;
+      audioSystem.addTrack(name, url, type);
+      console.log(`Added audio track: ${name}`);
+      updateAudioTracksList();
+    };
+    window.playAudio = function(name) {
+      if (audioSystem) {
+        audioSystem.playSFX(name);
+      }
+    };
+    function updateAudioTracksList() {
+      if (!audioSystem) return;
+      const list = document.getElementById('tracksList');
+      const tracks = audioSystem.getAllTracks();
+      list.innerHTML = tracks.map(t => `<div style="padding:5px;background:#2a2a2a;margin-bottom:5px;"> 🔊 ${t.name} (${t.type})</div>`).join('');
+    }
+
+    // Tilemap Editor Functions
+    let tilemapEditor = null;
+    window.createNewTilemap = function() {
+      if (!tilemapEditor) {
+        tilemapEditor = new TilemapEditor();
+      }
+      const name = document.getElementById('tilemapName').value || 'Map';
+      const width = parseInt(document.getElementById('mapWidth').value) || 20;
+      const height = parseInt(document.getElementById('mapHeight').value) || 15;
+      const tileSize = parseInt(document.getElementById('tileSize').value) || 32;
+      const tilemap = tilemapEditor.createTilemap(name, width, height, tileSize);
+      tilemapEditor.addLayer('Ground');
+      console.log(`Created tilemap: ${name} (${width}x${height})`);
+      updateTilemapsList();
+    };
+    function updateTilemapsList() {
+      if (!tilemapEditor) return;
+      const list = document.getElementById('tilemapsList');
+      const maps = tilemapEditor.getAllTilemaps();
+      list.innerHTML = maps.map(m => `<div style="padding:5px;background:#2a2a2a;margin-bottom:5px;">🗺️ ${m.properties.name} (${m.width}x${m.height})</div>`).join('');
+    }
+
+    // Scene Editor Functions
+    let sceneEditor = null;
+    window.createNewScene = function() {
+      if (!sceneEditor) {
+        sceneEditor = new SceneEditor();
+      }
+      const name = document.getElementById('sceneName').value || 'Scene';
+      const width = parseInt(document.getElementById('sceneWidth').value) || 1280;
+      const height = parseInt(document.getElementById('sceneHeight').value) || 720;
+      const scene = sceneEditor.createScene(name, width, height);
+      console.log(`Created scene: ${name}`);
+      updateScenesList();
+    };
+    window.addSceneObject = function() {
+      if (!sceneEditor) return;
+      const scene = sceneEditor.getCurrentScene();
+      if (!scene) return;
+      const type = document.getElementById('objectType').value;
+      const obj = new GameObject(type + '_obj', 100, 100, 32, 32);
+      obj.type = type;
+      scene.addGameObject(obj);
+      console.log(`Added ${type} object to scene`);
+    };
+    function updateScenesList() {
+      if (!sceneEditor) return;
+      const list = document.getElementById('scenesList');
+      const scenes = sceneEditor.getAllScenes();
+      list.innerHTML = scenes.map(s => `<div style="padding:5px;background:#2a2a2a;margin-bottom:5px;">🎬 ${s.name}</div>`).join('');
+    }
+
+    // AI Behavior Tree Functions
+    let aiManager = null;
+    window.createAIAgent = function() {
+      if (!aiManager) {
+        aiManager = new AIManager();
+      }
+      const name = document.getElementById('agentName').value || 'Agent';
+      const agent = aiManager.createAgent(name);
+      console.log(`Created AI agent: ${name}`);
+      updateAgentsList();
+    };
+    window.addBehaviorNode = function() {
+      console.log('Behavior node added to selected agent');
+    };
+    function updateAgentsList() {
+      if (!aiManager) return;
+      const list = document.getElementById('agentsList');
+      const agents = aiManager.agents;
+      list.innerHTML = agents.map(a => `<div style="padding:5px;background:#2a2a2a;margin-bottom:5px;">🤖 ${a.name} (HP: ${a.stats.health})</div>`).join('');
+    }
+
+    // Save Game Manager Functions
+    let saveGameManager = null;
+    window.quickSave = function() {
+      if (!saveGameManager) {
+        saveGameManager = new SaveGameManager();
+      }
+      const slotNum = parseInt(document.getElementById('saveSlotSelect').value) - 1;
+      const saveData = new SaveData(`Game Save - Slot ${slotNum + 1}`);
+      saveGameManager.save(slotNum);
+      console.log(`Game saved to slot ${slotNum + 1}`);
+      updateSavesList();
+    };
+    window.quickLoad = function() {
+      if (!saveGameManager) {
+        saveGameManager = new SaveGameManager();
+      }
+      const slotNum = parseInt(document.getElementById('saveSlotSelect').value) - 1;
+      const data = saveGameManager.load(slotNum);
+      if (data) {
+        console.log(`Game loaded from slot ${slotNum + 1}`);
+      }
+    };
+    window.autosaveToggle = function() {
+      if (!saveGameManager) {
+        saveGameManager = new SaveGameManager();
+      }
+      saveGameManager.autoSaveEnabled = !saveGameManager.autoSaveEnabled;
+      console.log(`Autosave: ${saveGameManager.autoSaveEnabled ? 'ON' : 'OFF'}`);
+    };
+    function updateSavesList() {
+      if (!saveGameManager) return;
+      const list = document.getElementById('saveSlotsList');
+      let html = '';
+      for (let i = 0; i < saveGameManager.slots.length; i++) {
+        const summary = saveGameManager.getSlotSummary(i);
+        const text = summary.isEmpty ? '(Empty)' : summary.slotName;
+        html += `<div style="padding:5px;background:#2a2a2a;margin-bottom:5px;">Slot ${i+1}: ${text}</div>`;
+      }
+      list.innerHTML = html;
+    }
+
+    // Sprite Sheet Editor Functions
+    let spriteEditor = null;
+    window.createNewSprite = function() {
+      if (!spriteEditor) {
+        spriteEditor = new SpriteSheetEditor();
+      }
+      const name = document.getElementById('spriteName').value || 'sprite';
+      const url = document.getElementById('spriteImageURL').value || '/assets/sprite.png';
+      const width = parseInt(document.getElementById('spriteWidth').value) || 32;
+      const height = parseInt(document.getElementById('spriteHeight').value) || 32;
+      const sprite = spriteEditor.createSprite(name, url, width, height);
+      console.log(`Created sprite: ${name}`);
+      updateSpritesList();
+    };
+    window.generateSpriteFrames = function() {
+      if (!spriteEditor) return;
+      const cols = parseInt(document.getElementById('framesPerRow').value) || 8;
+      spriteEditor.generateGridFrames(cols);
+      console.log(`Generated sprite frames (${cols} per row)`);
+    };
+    function updateSpritesList() {
+      if (!spriteEditor) return;
+      const list = document.getElementById('spritesList');
+      const sprites = spriteEditor.getAllSprites();
+      list.innerHTML = sprites.map(s => `<div style="padding:5px;background:#2a2a2a;margin-bottom:5px;">🖼️ ${s.name} (${s.getFrameCount()} frames)</div>`).join('');
+    }
+
+    // Localization Functions
+    let localizationManager = null;
+    window.registerLanguage = function() {
+      if (!localizationManager) {
+        localizationManager = new LocalizationManager();
+      }
+      const code = document.getElementById('langCode').value || 'en';
+      const name = document.getElementById('langName').value || code;
+      localizationManager.registerLanguage(code, name);
+      console.log(`Registered language: ${code}`);
+      updateLanguagesList();
+    };
+    window.addTranslatestring = function() {
+      if (!localizationManager) return;
+      const lang = localizationManager.currentLanguage;
+      const key = document.getElementById('stringKey').value;
+      const text = document.getElementById('stringTranslation').value;
+      localizationManager.addTranslation(key, lang, text);
+      console.log(`Added translation: ${key}`);
+    };
+    function updateLanguagesList() {
+      if (!localizationManager) return;
+      const list = document.getElementById('languagesList');
+      const langs = localizationManager.getSupportedLanguages();
+      list.innerHTML = langs.map(l => `<div style="padding:5px;background:#2a2a2a;margin-bottom:5px;">🌍 ${l}</div>`).join('');
+    }
+
     // Initialize when panels are shown
     const observer = new MutationObserver(() => {
       const codePanel = document.getElementById('panel-code-editor');
@@ -754,7 +1155,15 @@ int main() {
       'dialogue': 'panel-dialogue',
       'code-editor': 'panel-code-editor',
       'blueprint-scripting': 'panel-blueprint-editor',
-      'build': 'panel-build'
+      'build': 'panel-build',
+      'particles': 'panel-particles',
+      'audio': 'panel-audio',
+      'tilemap': 'panel-tilemap',
+      'scene': 'panel-scene',
+      'ai-trees': 'panel-ai-trees',
+      'save-manager': 'panel-save-manager',
+      'sprites': 'panel-sprites',
+      'localization': 'panel-localization'
     };
 
     // Sidebar navigation
