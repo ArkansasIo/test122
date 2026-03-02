@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Studio - Advanced Game Development Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e1e;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #252526;
+            border-right: 1px solid #3e3e42;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #858585;
+            padding: 10px 5px;
+            border-bottom: 1px solid #3e3e42;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-item {
+            padding: 8px 10px;
+            margin: 2px 0;
+            background: #2d2d30;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background: #3e3e42;
+            color: #fff;
+        }
+
+        .sidebar-item.active {
+            background: #667eea;
+            color: #fff;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toolbar {
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+            padding: 10px 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            height: 50px;
+        }
+
+        .toolbar-button {
+            padding: 6px 12px;
+            background: #667eea;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .toolbar-button:hover {
+            background: #7b8ef0;
+        }
+
+        .toolbar-button:active {
+            background: #5566d2;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow: auto;
+            padding: 15px;
+            background: #1e1e1e;
+        }
+
+        .panel {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .panel-header {
+            background: #1a1a1a;
+            padding: 12px 15px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .panel-content {
+            padding: 15px;
+        }
+
+        .control-group {
+            margin-bottom: 12px;
+        }
+
+        .control-label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #a0a0a0;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 6px 8px;
+            background: #1a1a1a;
+            border: 1px solid #3e3e42;
+            color: #e0e0e0;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .button {
+            flex: 1;
+            padding: 8px;
+            background: #667eea;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .button:hover {
+            background: #7b8ef0;
+        }
+
+        .button.secondary {
+            background: #3e3e42;
+            color: #e0e0e0;
+        }
+
+        .button.secondary:hover {
+            background: #4e4e52;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .stat {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 3px;
+            border-left: 3px solid #667eea;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #858585;
+            margin-top: 4px;
+        }
+
+        .info-box {
+            background: #1a1a1a;
+            border: 1px solid #3e3e42;
+            padding: 12px;
+            border-radius: 3px;
+            margin-top: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .warning { color: #ce9178; }
+        .info { color: #9cdcfe; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        #statusBar {
+            background: #2d2d30;
+            border-top: 1px solid #3e3e42;
+            padding: 10px 15px;
+            font-size: 12px;
+            color: #858585;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #3e3e42;
+            border-radius: 3px;
+        }
+
+        .file-item {
+            padding: 6px 10px;
+            border-bottom: 1px solid #3e3e42;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-item:hover {
+            background: #2d2d30;
+            color: #667eea;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <!-- Core Systems -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">🎮 Core</div>
+                <div class="sidebar-item active" onclick="showPanel('engine')">Game Engine</div>
+                <div class="sidebar-item" onclick="showPanel('editor')">Code Editor</div>
+                <div class="sidebar-item" onclick="showPanel('blueprint')">Blueprint System</div>
+                <div class="sidebar-item" onclick="showPanel('input')">Input Manager</div>
+            </div>
+
+            <!-- Game Systems -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">🎯 Game Systems</div>
+                <div class="sidebar-item" onclick="showPanel('character')">Character System</div>
+                <div class="sidebar-item" onclick="showPanel('dialogue')">Dialogue System</div>
+                <div class="sidebar-item" onclick="showPanel('animation')">Animation System</div>
+                <div class="sidebar-item" onclick="showPanel('encounter')">Encounter System</div>
+            </div>
+
+            <!-- Content & Assets -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">📦 Content</div>
+                <div class="sidebar-item" onclick="showPanel('projectmgr')">Project Manager</div>
+                <div class="sidebar-item" onclick="showPanel('export')">Export Builder</div>
+                <div class="sidebar-item" onclick="showPanel('tilemap')">Tilemap Editor</div>
+                <div class="sidebar-item" onclick="showPanel('spritesheet')">Sprite Sheet Editor</div>
+            </div>
+
+            <!-- Advanced Systems (Phase 1) -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">✨ Advanced</div>
+                <div class="sidebar-item" onclick="showPanel('particle')">Particle Effects</div>
+                <div class="sidebar-item" onclick="showPanel('audio')">Audio System</div>
+                <div class="sidebar-item" onclick="showPanel('scene')">Scene Editor</div>
+                <div class="sidebar-item" onclick="showPanel('ai')">AI Behavior Trees</div>
+                <div class="sidebar-item" onclick="showPanel('save')">Save Game Manager</div>
+                <div class="sidebar-item" onclick="showPanel('localization')">Localization</div>
+            </div>
+
+            <!-- Professional Features (Phase 2) -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">🚀 Professional</div>
+                <div class="sidebar-item" onclick="showPanel('networking')">Networking</div>
+                <div class="sidebar-item" onclick="showPanel('physics')">Physics Engine</div>
+                <div class="sidebar-item" onclick="showPanel('shaders')">Shader System</div>
+                <div class="sidebar-item" onclick="showPanel('ui')">UI Toolkit</div>
+                <div class="sidebar-item" onclick="showPanel('leaderboard')">Leaderboard</div>
+                <div class="sidebar-item" onclick="showPanel('analytics')">Analytics</div>
+                <div class="sidebar-item" onclick="showPanel('cloud')">Cloud Save</div>
+                <div class="sidebar-item" onclick="showPanel('plugins')">Plugin System</div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <button class="toolbar-button" onclick="buildProject()">▶ Build</button>
+                <button class="toolbar-button" onclick="runProject()">🎮 Play</button>
+                <button class="toolbar-button" onclick="saveProject()">💾 Save All</button>
+                <button class="toolbar-button" onclick="syncCloudSaves()">☁️ Sync Cloud</button>
+                <div style="flex: 1;"></div>
+                <span id="buildStatus">Ready</span>
+            </div>
+
+            <!-- Content Panels -->
+            <div class="content-area">
+                
+                <!-- ===== CORE SYSTEMS ===== -->
+                
+                <!-- Game Engine Panel -->
+                <div id="engine" class="panel active">
+                    <div class="panel-header">
+                        <div class="panel-title">🎮 Game Engine 2D</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Resolution</label>
+                            <div class="grid-2">
+                                <input type="number" id="engineWidth" value="320" placeholder="Width">
+                                <input type="number" id="engineHeight" value="180" placeholder="Height">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Graphics Settings</label>
+                            <div class="grid-2">
+                                <input type="number" id="engineFPS" value="60" placeholder="Target FPS">
+                                <select id="engineRenderer">
+                                    <option>Canvas 2D</option>
+                                    <option>WebGL</option>
+                                    <option>Auto</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="engFPS">60</div>
+                                <div class="stat-label">Current FPS</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="engSprites">0</div>
+                                <div class="stat-label">Active Sprites</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="initializeGameEngine()">Initialize</button>
+                            <button class="button secondary" onclick="getEngineStats()">Stats</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Editor Panel -->
+                <div id="editor" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">📝 Code Editor</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Language</label>
+                            <select id="editorLanguage" onchange="updateEditorLanguage()">
+                                <option value="typescript">TypeScript</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="cpp">C++</option>
+                                <option value="c">C</option>
+                                <option value="asm">Assembly</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Code</label>
+                            <textarea id="codeEditor" rows="8" placeholder="// Write your code here"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="compileCode()">⚙️ Compile</button>
+                            <button class="button secondary" onclick="formatCode()">📐 Format</button>
+                        </div>
+                        <div id="compileOutput" class="info-box" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Blueprint System Panel -->
+                <div id="blueprint" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🔵 Blueprint Visual Scripting</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Create Node</label>
+                            <select id="blueprintNodeType">
+                                <option>Event</option>
+                                <option>Logic</option>
+                                <option>Math</option>
+                                <option>Variable</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="addBlueprintNode()">+ Add Node</button>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="bpNodes">0</div>
+                                <div class="stat-label">Total Nodes</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="bpConnections">0</div>
+                                <div class="stat-label">Connections</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Manager Panel -->
+                <div id="input" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">⌨️ Input Manager</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Input Devices</label>
+                            <div style="display: flex; gap: 5px;">
+                                <label><input type="checkbox" id="inputKeyboard" checked> Keyboard</label>
+                                <label><input type="checkbox" id="inputMouse" checked> Mouse</label>
+                                <label><input type="checkbox" id="inputGamepad" checked> Gamepad</label>
+                            </div>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="inputPressed">0</div>
+                                <div class="stat-label">Keys Pressed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="inputConnected">0</div>
+                                <div class="stat-label">Gamepad(s)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== GAME SYSTEMS ===== -->
+
+                <!-- Character System Panel -->
+                <div id="character" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🧙 Character System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Character Name</label>
+                            <input type="text" id="charName" placeholder="Enter character name">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Character Stats</label>
+                            <div class="grid-3">
+                                <div>
+                                    <label class="control-label">Strength</label>
+                                    <input type="number" id="charStr" value="10">
+                                </div>
+                                <div>
+                                    <label class="control-label">Vitality</label>
+                                    <input type="number" id="charVit" value="10">
+                                </div>
+                                <div>
+                                    <label class="control-label">Magic</label>
+                                    <input type="number" id="charMag" value="10">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button" onclick="createCharacter()">Create Character</button>
+                    </div>
+                </div>
+
+                <!-- Dialogue System Panel -->
+                <div id="dialogue" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">💬 Dialogue System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Dialogue Text</label>
+                            <textarea id="dialogueText" rows="4" placeholder="Enter dialogue..."></textarea>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Branches</label>
+                            <div class="file-list" id="dialogueBranches">
+                                <div class="file-item">No branches yet</div>
+                            </div>
+                        </div>
+                        <button class="button" onclick="addDialogueBranch()">+ Branch</button>
+                    </div>
+                </div>
+
+                <!-- Animation System Panel -->
+                <div id="animation" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🎬 Animation System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Animation Name</label>
+                            <input type="text" id="animName" placeholder="idle, walk, attack...">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Frames & Speed</label>
+                            <div class="grid-2">
+                                <input type="number" id="animFrames" value="4" placeholder="Frame Count">
+                                <input type="number" id="animSpeed" value="10" placeholder="Speed">
+                            </div>
+                        </div>
+                        <button class="button" onclick="createAnimation()">Create Animation</button>
+                    </div>
+                </div>
+
+                <!-- Encounter System Panel -->
+                <div id="encounter" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">⚔️ Encounter System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Encounter Type</label>
+                            <select id="encounterType">
+                                <option>Random Battle</option>
+                                <option>Boss Fight</option>
+                                <option>Tutorial</option>
+                                <option>Arena</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Difficulty</label>
+                            <select id="encounterDifficulty">
+                                <option>Easy</option>
+                                <option>Normal</option>
+                                <option>Hard</option>
+                                <option>Insane</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="generateEncounter()">Generate Encounter</button>
+                    </div>
+                </div>
+
+                <!-- ===== CONTENT & ASSETS ===== -->
+
+                <!-- Project Manager Panel -->
+                <div id="projectmgr" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">📁 Project Manager</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Project Name</label>
+                            <input type="text" id="projName" placeholder="My Project">
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="projAssets">0</div>
+                                <div class="stat-label">Assets</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="projSize">0 KB</div>
+                                <div class="stat-label">Size</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="openProject()">📂 Open</button>
+                            <button class="button secondary" onclick="newProject()">✨ New</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Builder Panel -->
+                <div id="export" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">📦 Export Builder</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Export Targets</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                <label><input type="checkbox" checked> Windows</label>
+                                <label><input type="checkbox" checked> macOS</label>
+                                <label><input type="checkbox"> Linux</label>
+                                <label><input type="checkbox"> Web</label>
+                                <label><input type="checkbox"> iOS</label>
+                                <label><input type="checkbox"> Android</label>
+                            </div>
+                        </div>
+                        <button class="button" onclick="exportProject()">🚀 Export</button>
+                    </div>
+                </div>
+
+                <!-- Tilemap Editor Panel -->
+                <div id="tilemap" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🗺️ Tilemap Editor</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Tilemap Size</label>
+                            <div class="grid-2">
+                                <input type="number" id="tilemapWidth" value="16">
+                                <input type="number" id="tilemapHeight" value="16">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Tile Size</label>
+                            <input type="number" id="tileSize" value="16" placeholder="Pixels">
+                        </div>
+                        <button class="button" onclick="createTilemap()">Create Tilemap</button>
+                    </div>
+                </div>
+
+                <!-- Sprite Sheet Editor Panel -->
+                <div id="spritesheet" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🖼️ Sprite Sheet Editor</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Sheet Properties</label>
+                            <div class="grid-2">
+                                <input type="number" id="spriteWidth" value="32" placeholder="Frame Width">
+                                <input type="number" id="spriteHeight" value="32" placeholder="Frame Height">
+                            </div>
+                        </div>
+                        <button class="button" onclick="createSpriteSheet()">Create Sheet</button>
+                    </div>
+                </div>
+
+                <!-- ===== ADVANCED SYSTEMS (PHASE 1) ===== -->
+
+                <!-- Particle Effects Panel -->
+                <div id="particle" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">✨ Particle Effects</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Preset Effects</label>
+                            <select id="particlePreset">
+                                <option>Fire</option>
+                                <option>Smoke</option>
+                                <option>Explosion</option>
+                                <option>Magic</option>
+                                <option>Rain</option>
+                            </select>
+                        </div>
+                        <div class="grid-2">
+                            <div>
+                                <label class="control-label">Max Particles</label>
+                                <input type="number" id="particleCount" value="100">
+                            </div>
+                            <div>
+                                <label class="control-label">Duration (ms)</label>
+                                <input type="number" id="particleDuration" value="2000">
+                            </div>
+                        </div>
+                        <button class="button" onclick="createParticleEffect()">Create Effect</button>
+                    </div>
+                </div>
+
+                <!-- Audio System Panel -->
+                <div id="audio" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🔊 Audio System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Audio Tracks</label>
+                            <div class="grid-2">
+                                <div>
+                                    <label class="control-label">Master Volume</label>
+                                    <input type="range" min="0" max="100" value="80">
+                                </div>
+                                <div>
+                                    <label class="control-label">Music Volume</label>
+                                    <input type="range" min="0" max="100" value="70">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button" onclick="testAudio()">🎵 Test Audio</button>
+                    </div>
+                </div>
+
+                <!-- Scene Editor Panel -->
+                <div id="scene" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🎭 Scene Editor</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Scene Name</label>
+                            <input type="text" id="sceneName" placeholder="Scene_1">
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="sceneObjects">0</div>
+                                <div class="stat-label">Objects</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="createScene()">Create Scene</button>
+                            <button class="button secondary" onclick="loadScene()">Load Scene</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Behavior Trees Panel -->
+                <div id="ai" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🤖 AI Behavior Trees</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Behavior Type</label>
+                            <select id="comportmentType">
+                                <option>Patrol</option>
+                                <option>Chase</option>
+                                <option>Attack</option>
+                                <option>Idle</option>
+                                <option>Custom</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="createAIBehavior()">Create Behavior</button>
+                    </div>
+                </div>
+
+                <!-- Save Game Manager Panel -->
+                <div id="save" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">💾 Save Game Manager</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Save Slots</label>
+                            <div class="file-list" id="saveSlotsList">
+                                <div class="file-item">Slot 1 - Empty</div>
+                                <div class="file-item">Slot 2 - Empty</div>
+                                <div class="file-item">Slot 3 - Empty</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="saveGame()">Save</button>
+                            <button class="button secondary" onclick="loadGame()">Load</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Localization Panel -->
+                <div id="localization" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🌐 Localization System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Language</label>
+                            <select id="locLanguage">
+                                <option>English</option>
+                                <option>Spanish</option>
+                                <option>French</option>
+                                <option>German</option>
+                                <option>Japanese</option>
+                            </select>
+                        </div>
+                        <button class="button" onclick="changeLanguage()">Apply Language</button>
+                    </div>
+                </div>
+
+                <!-- ===== PROFESSIONAL FEATURES (PHASE 2) ===== -->
+
+                <!-- Networking Panel -->
+                <div id="networking" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🌐 Networking & Multiplayer</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Server Details</label>
+                            <div>
+                                <label class="control-label">Endpoint</label>
+                                <input type="text" id="netEndpoint" placeholder="ws://localhost:8080">
+                            </div>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="netPlayers">0</div>
+                                <div class="stat-label">Connected</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="netLatency">0ms</div>
+                                <div class="stat-label">Latency</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="connectNetwork()">Connect</button>
+                            <button class="button secondary" onclick="createSession()">New Session</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Physics Engine Panel -->
+                <div id="physics" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">⚙️ Physics Engine</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Physics World</label>
+                            <div class="grid-2">
+                                <div>
+                                    <label class="control-label">Gravity</label>
+                                    <input type="number" id="physicsGravity" value="9.8" step="0.1">
+                                </div>
+                                <div>
+                                    <label class="control-label">Time Scale</label>
+                                    <input type="number" id="physicsTimescale" value="1" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="physicsBodyCount">0</div>
+                                <div class="stat-label">Bodies</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="physicsCollisions">0</div>
+                                <div class="stat-label">Collisions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shader System Panel -->
+                <div id="shaders" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🎨 Shader System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Preset Shaders</label>
+                            <select id="shaderPreset">
+                                <option>Color</option>
+                                <option>Texture</option>
+                                <option>Bloom</option>
+                                <option>Blur</option>
+                                <option>Distortion</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Post Effects</label>
+                            <div style="display: flex; gap: 5px;">
+                                <label><input type="checkbox"> Bloom</label>
+                                <label><input type="checkbox"> Blur</label>
+                                <label><input type="checkbox"> Distortion</label>
+                            </div>
+                        </div>
+                        <button class="button" onclick="applyShader()">Apply Shader</button>
+                    </div>
+                </div>
+
+                <!-- UI Toolkit Panel -->
+                <div id="ui" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🎛️ UI Toolkit</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">UI Component</label>
+                            <select id="uiComponent">
+                                <option>Button</option>
+                                <option>TextField</option>
+                                <option>Slider</option>
+                                <option>Panel</option>
+                                <option>Label</option>
+                            </select>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="uiElements">0</div>
+                                <div class="stat-label">Elements</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="uiTheme">Light</div>
+                                <div class="stat-label">Theme</div>
+                            </div>
+                        </div>
+                        <button class="button" onclick="addUIComponent()">+ Component</button>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Panel -->
+                <div id="leaderboard" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🏆 Leaderboard & Scores</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Leaderboard Name</label>
+                            <input type="text" id="lbName" placeholder="Global">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Top Scores</label>
+                            <div class="file-list" id="lbTopScores">
+                                <div class="file-item">No scores yet</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="createLeaderboard()">Create</button>
+                            <button class="button secondary" onclick="viewLeaderboard()">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Panel -->
+                <div id="analytics" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">📊 Analytics & Telemetry</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="analyticsSessions">0</div>
+                                <div class="stat-label">Sessions</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="analyticsEvents">0</div>
+                                <div class="stat-label">Events</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="analyticsErrors">0</div>
+                                <div class="stat-label">Errors</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="analyticsCreated">0h</div>
+                                <div class="stat-label">Uptime</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="startAnalyticsSession()">Start Session</button>
+                            <button class="button secondary" onclick="exportAnalytics()">Export</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cloud Save Panel -->
+                <div id="cloud" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">☁️ Cloud Save Integration</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">API Configuration</label>
+                            <input type="text" id="cloudApiEndpoint" placeholder="https://api.example.com">
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="cloudSaves">0</div>
+                                <div class="stat-label">Saves</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="cloudConflicts">0</div>
+                                <div class="stat-label">Conflicts</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="syncCloudSaves()">☁️ Sync</button>
+                            <button class="button secondary" onclick="resolveConflicts()">⚠️ Conflicts</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plugin System Panel -->
+                <div id="plugins" class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">🔌 Plugin & Mod System</div>
+                    </div>
+                    <div class="panel-content">
+                        <div class="control-group">
+                            <label class="control-label">Installed Plugins</label>
+                            <div class="file-list" id="pluginsList">
+                                <div class="file-item">No plugins installed</div>
+                            </div>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value" id="pluginCount">0</div>
+                                <div class="stat-label">Total</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="pluginEnabled">0</div>
+                                <div class="stat-label">Enabled</div>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button" onclick="loadPlugin()">📦 Load</button>
+                            <button class="button secondary" onclick="createPlugin()">✨ Create</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Status Bar -->
+            <div id="statusBar">
+                <span>Dragon Studio v2.0 | 22 Advanced Systems Ready</span>
+                <span id="statusTime"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/game-engine.js"></script>
+    <script src="src/code-editor.js"></script>
+    <script src="src/blueprint-system.js"></script>
+    <script src="src/character-system.js"></script>
+    <script src="src/dialogue-system.js"></script>
+    <script src="src/animation-system.js"></script>
+    <script src="src/project-manager.js"></script>
+    <script src="src/export-builder.js"></script>
+    <script src="src/input-manager.js"></script>
+    <script src="src/particle-system.js"></script>
+    <script src="src/audio-system.js"></script>
+    <script src="src/tilemap-editor.js"></script>
+    <script src="src/scene-editor.js"></script>
+    <script src="src/ai-behavior-tree.js"></script>
+    <script src="src/save-game-manager.js"></script>
+    <script src="src/sprite-sheet-editor.js"></script>
+    <script src="src/localization-system.js"></script>
+    <script src="src/networking-system.js"></script>
+    <script src="src/physics-engine.js"></script>
+    <script src="src/shader-system.js"></script>
+    <script src="src/ui-toolkit.js"></script>
+    <script src="src/leaderboard-system.js"></script>
+    <script src="src/analytics-system.js"></script>
+    <script src="src/cloud-save-system.js"></script>
+    <script src="src/plugin-system.js"></script>
+
+    <script>
+        // Global state
+        const systemsState = {
+            engine: null,
+            editor: null,
+            blueprint: null,
+            character: null,
+            input: null,
+            networking: null,
+            physics: null,
+            leaderboard: null,
+            analytics: null,
+            cloud: null,
+            plugins: null,
+            ui: null
+        };
+
+        // Initialize all systems
+        function initializeAllSystems() {
+            console.log('Initializing Dragon Studio...');
+            
+            // Initialize core systems
+            if (typeof GameEngine !== 'undefined') systemsState.engine = new GameEngine();
+            if (typeof CodeEditor !== 'undefined') systemsState.editor = new CodeEditor();
+            if (typeof NetworkManager !== 'undefined') systemsState.networking = new NetworkManager();
+            if (typeof PhysicsWorld !== 'undefined') systemsState.physics = new PhysicsWorld();
+            if (typeof LeaderboardManager !== 'undefined') systemsState.leaderboard = new LeaderboardManager();
+            if (typeof AnalyticsManager !== 'undefined') systemsState.analytics = new AnalyticsManager();
+            if (typeof CloudSaveManager !== 'undefined') systemsState.cloud = new CloudSaveManager();
+            if (typeof PluginManager !== 'undefined') systemsState.plugins = new PluginManager();
+            if (typeof UIManager !== 'undefined') systemsState.ui = new UIManager();
+
+            console.log('All systems initialized successfully');
+            updateStatusBar('All systems initialized!');
+        }
+
+        // Panel management
+        function showPanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(p => p.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+
+            const items = document.querySelectorAll('.sidebar-item');
+            items.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Update status bar
+        function updateStatusBar(message) {
+            const status = document.getElementById('statusBar');
+            if (status) {
+                const timeSpan = status.querySelector('#statusTime');
+                if (timeSpan) {
+                    timeSpan.textContent = message + ' | ' + new Date().toLocaleTimeString();
+                }
+            }
+        }
+
+        // System initialization functions
+        function initializeGameEngine() {
+            if (systemsState.engine) {
+                const engineStats = systemsState.engine.getStats();
+                console.log('Game Engine initialized:', engineStats);
+                alert('Game Engine initialized successfully!');
+            }
+        }
+
+        // Build project
+        function buildProject() {
+            document.getElementById('buildStatus').textContent = '⏳ Building...';
+            setTimeout(() => {
+                document.getElementById('buildStatus').textContent = '✅ Build Complete';
+                updateStatusBar('Project built successfully');
+            }, 2000);
+        }
+
+        // Run project
+        function runProject() {
+            alert('🎮 Starting game...');
+        }
+
+        // Save project
+        function saveProject() {
+            if (systemsState.cloud) {
+                systemsState.cloud.sync();
+                updateStatusBar('Project saved');
+                alert('✅ Project saved to cloud!');
+            }
+        }
+
+        // Sync cloud saves
+        function syncCloudSaves() {
+            if (systemsState.cloud) {
+                systemsState.cloud.sync();
+                updateStatusBar('Cloud saves synced');
+                alert('☁️ Sync complete!');
+            }
+        }
+
+        // Export project
+        function exportProject() {
+            alert('📦 Export dialog would open here');
+        }
+
+        // Generic functions for demos
+        function createCharacter() { alert('✨ Character created!'); }
+        function addDialogueBranch() { alert('💬 New dialogue branch added'); }
+        function createAnimation() { alert('🎬 Animation created'); }
+        function generateEncounter() { alert('⚔️ Encounter generated'); }
+        function openProject() { alert('📂 Open file dialog'); }
+        function newProject() { alert('✨ New project wizard'); }
+        function createTilemap() { alert('🗺️ Tilemap created'); }
+        function createSpriteSheet() { alert('🖼️ Sprite sheet created'); }
+        function createParticleEffect() { alert('✨ Effect created'); }
+        function testAudio() { alert('🔊 Audio test playing'); }
+        function createScene() { alert('🎭 Scene created'); }
+        function loadScene() { alert('📂 Load scene dialog'); }
+        function createAIBehavior() { alert('🤖 AI behavior tree created'); }
+        function saveGame() { alert('💾 Game saved'); }
+        function loadGame() { alert('💾 Game loaded'); }
+        function changeLanguage() { alert('🌐 Language changed'); }
+        function connectNetwork() { alert('🌐 Connecting...'); }
+        function createSession() { alert('🌐 Session created'); }
+        function applyShader() { alert('🎨 Shader applied'); }
+        function addUIComponent() { alert('🎛️ Component added'); }
+        function createLeaderboard() { alert('🏆 Leaderboard created'); }
+        function viewLeaderboard() { alert('🏆 Viewing leaderboard'); }
+        function startAnalyticsSession() { if (systemsState.analytics) systemsState.analytics.startSession(); alert('📊 Analytics session started'); }
+        function exportAnalytics() { alert('📊 Export analytics dialog'); }
+        function resolveConflicts() { alert('⚠️ Conflict resolution dialog'); }
+        function loadPlugin() { alert('🔌 Load plugin dialog'); }
+        function createPlugin() { alert('✨ New plugin wizard'); }
+        function compileCode() { alert('⚙️ Code compiled'); document.getElementById('compileOutput').textContent = 'Compilation successful!'; }
+        function formatCode() { alert('📐 Code formatted'); }
+        function getEngineStats() { alert('📊 Fetching engine stats...'); }
+        function addBlueprintNode() { alert('🔵 Node added to graph'); }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeAllSystems();
+            
+            // Update time
+            setInterval(() => {
+                const time = new Date().toLocaleTimeString();
+                const statusTime = document.getElementById('statusTime');
+                if (statusTime) statusTime.textContent = time;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
