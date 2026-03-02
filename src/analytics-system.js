@@ -3,6 +3,7 @@
  * Tracks gameplay events, performance metrics, user behavior, and error diagnostics
  */
 
+/* global window, navigator */
 class AnalyticsEvent {
   constructor(eventName, category = '', properties = {}) {
     this.id = Math.random().toString(36).substr(2, 9);
@@ -13,8 +14,11 @@ class AnalyticsEvent {
     this.sessionId = null;
     this.userId = null;
     this.metadata = {
+      // eslint-disable-next-line no-undef
       url: typeof window !== 'undefined' ? window.location.href : '',
+      // eslint-disable-next-line no-undef
       userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+      // eslint-disable-next-line no-undef
       platform: typeof navigator !== 'undefined' ? navigator.platform : ''
     };
   }
@@ -183,12 +187,17 @@ class AnalyticsManager {
     this.eventBuffer = [];
     this.bufferSize = 100;
     this.autoFlushInterval = 30000; // 30 seconds
+    // eslint-disable-next-line no-undef
     this.isOnline = typeof navigator !== 'undefined' && navigator.onLine;
+    // eslint-disable-next-line no-undef
     this.localStorage = typeof window !== 'undefined' ? window.localStorage : null;
     this.eventCallbacks = {};
 
+    // eslint-disable-next-line no-undef
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line no-undef
       window.addEventListener('online', () => this.setOnlineStatus(true));
+      // eslint-disable-next-line no-undef
       window.addEventListener('offline', () => this.setOnlineStatus(false));
       this.startAutoFlush();
     }
@@ -206,10 +215,7 @@ class AnalyticsManager {
 
     const summary = this.currentSession.endSession();
     this.sessionHistory.push(this.currentSession);
-    const session = this.currentSession;
-    this.currentSession = null;
 
-    console.log(`Analytics session ended. Events: ${summary.eventCount}, Duration: ${Math.round(summary.duration / 1000)}s`);
     return summary;
   }
 

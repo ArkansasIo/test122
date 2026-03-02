@@ -138,6 +138,7 @@ class NetworkManager {
   connect() {
     return new Promise((resolve, reject) => {
       try {
+        // eslint-disable-next-line no-undef
         this.socket = new WebSocket(this.url);
 
         this.socket.onopen = () => {

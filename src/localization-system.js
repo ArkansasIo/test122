@@ -24,7 +24,7 @@ class LocalizationEntry {
   }
 
   hasTranslation(language) {
-    return this.translations.hasOwnProperty(language);
+    return Object.prototype.hasOwnProperty.call(this.translations, language);
   }
 
   serialize() {
@@ -254,7 +254,7 @@ class LocalizationManager {
   }
 
   importAllLanguages(data) {
-    for (let [code, packData] of Object.entries(data)) {
+    for (let [, packData] of Object.entries(data)) {
       this.importLanguagePack(packData);
     }
   }
@@ -276,7 +276,7 @@ class LocalizationManager {
     if (!pack) return null;
 
     const totalKeys = new Set();
-    for (let [code, p] of this.languages) {
+    for (let [, p] of this.languages) {
       for (let key of p.entries.keys()) {
         totalKeys.add(key);
       }

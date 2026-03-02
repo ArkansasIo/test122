@@ -2,6 +2,7 @@
  * Save Game Manager
  * Handles game state serialization, saving, loading, and slots
  */
+/* global localStorage */
 
 class SaveData {
   constructor(slotName = 'Save Slot') {

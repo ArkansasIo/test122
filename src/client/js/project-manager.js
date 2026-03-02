@@ -333,6 +333,7 @@ class ProjectManager {
     if (typeof window !== 'undefined') {
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
+      // eslint-disable-next-line no-undef
       const a = document.createElement('a');
       a.href = url;
       a.download = `${project.name}.dragonproject`;

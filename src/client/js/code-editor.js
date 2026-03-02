@@ -2,6 +2,7 @@
  * Code Editor Component for Dragon Studio
  * Supports ASM, C, C++, TypeScript with syntax highlighting and code completion
  */
+/* global document */
 
 class CodeEditor {
   constructor(containerId) {

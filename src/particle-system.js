@@ -61,11 +61,11 @@ class ParticleEmitter {
   }
 
   update(deltaTime = 0.016) {
-    let active = 0;
+    // Track and update all particles
     for (let i = 0; i < this.particles.length; i++) {
       this.particles[i].update(deltaTime);
       if (this.particles[i].alive) {
-        active++;
+        // Particle is active
       } else {
         this.particles.splice(i, 1);
         i--;

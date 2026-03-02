@@ -326,8 +326,7 @@ class PhysicsWorld {
 
   raycast(x1, y1, x2, y2) {
     const results = [];
-    const ray = new Vector2(x2 - x1, y2 - y1);
-    const rayLength = ray.magnitude();
+    // Ray calculations could be added here for more complex collision detection
 
     for (let body of this.bodies) {
       const bounds = body.getBounds();

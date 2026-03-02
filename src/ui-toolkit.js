@@ -105,8 +105,8 @@ class Button extends UIElement {
     this.pressed = false;
   }
 
-  onMouseMove(x, y) {
-    this.hovered = this.isPointInside(x, y) && this.enabled;
+  onMouseMove(x, _y) {
+    this.hovered = this.isPointInside(x, _y) && this.enabled;
   }
 
   render(ctx) {
@@ -230,7 +230,7 @@ class Slider extends UIElement {
     this.dragging = false;
   }
 
-  onMouseMove(x, y) {
+  onMouseMove(x, _y) {
     if (this.dragging) {
       this.updateValue(x);
     }

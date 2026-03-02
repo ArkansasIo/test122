@@ -2,6 +2,7 @@
  * Plugin/Mod System
  * Extensible plugin architecture for mods, custom content, and user extensions
  */
+/* global window */
 
 class PluginAPI {
   constructor() {

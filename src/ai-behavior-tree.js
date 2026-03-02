@@ -23,7 +23,7 @@ class AINode {
     this.children = this.children.filter(child => child.id !== id);
   }
 
-  execute(context) {
+  execute(_context) {
     throw new Error('execute() must be overridden');
   }
 
@@ -142,7 +142,7 @@ class RandomNode extends AINode {
     super('random', name, { probability });
   }
 
-  execute(context) {
+  execute(_context) {
     const rand = Math.random();
     this.status = rand < this.data.probability ? 'success' : 'failure';
   }

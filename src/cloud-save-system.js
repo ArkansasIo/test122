@@ -2,6 +2,7 @@
  * Cloud Save Integration
  * Manages game saves with cloud synchronization, versioning, and conflict resolution
  */
+/* global window, navigator */
 
 class SaveFile {
   constructor(name = '', gameState = {}, slot = 1) {

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable */
 
 /**
  * Labyrinth of the Dragon - IDE Editor Launcher

@@ -186,7 +186,6 @@ class DialogueManager {
   }
 
   endConversation() {
-    const finalNode = this.getCurrentNode();
     this.currentTree = null;
     this.currentNodeId = null;
     return this.history;

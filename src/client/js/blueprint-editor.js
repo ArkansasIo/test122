@@ -2,6 +2,7 @@
  * Blueprint Scripting System for Dragon Studio
  * Visual node-based scripting like Unreal Engine 5 Blueprints
  */
+/* global document */
 
 class BlueprintNode {
   constructor(id, type, title, x = 0, y = 0) {
@@ -181,14 +182,13 @@ class BlueprintEditor {
     this.lastPanY = e.clientY;
   }
 
-  onMouseUp(e) {
+  onMouseUp(_e) {
     this.draggingNode = null;
   }
 
   onMouseWheel(e) {
     e.preventDefault();
     const zoomSpeed = 0.1;
-    const oldZoom = this.zoomLevel;
     this.zoomLevel = Math.max(0.1, this.zoomLevel - (e.deltaY > 0 ? zoomSpeed : -zoomSpeed));
   }
 

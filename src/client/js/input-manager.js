@@ -2,6 +2,7 @@
  * Input System & Controls Mapping for Dragon Studio
  * Keyboard, mouse, gamepad support with customizable controls
  */
+/* global window, navigator, document */
 
 class InputManager {
   constructor() {

@@ -2,6 +2,7 @@
  * Tilemap Editor
  * Edits 2D tilemaps with tile placement, brushes, and layers
  */
+/* global Image */
 
 class Tileset {
   constructor(name, imageUrl, tileWidth, tileHeight, columns = 16) {

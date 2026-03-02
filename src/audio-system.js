@@ -2,6 +2,7 @@
  * Audio System
  * Manages music, sound effects, and audio playback with volume control
  */
+/* global Audio */
 
 class AudioTrack {
   constructor(name, url, type = 'sfx') {
@@ -143,7 +144,7 @@ class AudioSystem {
     return track;
   }
 
-  playMusic(name, fadeInTime = 1.0) {
+  playMusic(name, _fadeInTime = 1.0) {
     if (!this.tracks.has(name)) {
       console.warn(`Music track not found: ${name}`);
       return;
@@ -159,7 +160,7 @@ class AudioSystem {
     this.currentTrack = track;
   }
 
-  stopMusic(fadeOutTime = 1.0) {
+  stopMusic(_fadeOutTime = 1.0) {
     if (this.currentTrack) {
       this.currentTrack.stop();
       this.currentTrack = null;
@@ -215,7 +216,7 @@ class AudioSystem {
   }
 
   stopAllSFX() {
-    for (let [name, track] of this.tracks) {
+    for (let [, track] of this.tracks) {
       if (track.type === 'sfx' && track.isPlaying()) {
         track.stop();
       }
@@ -223,7 +224,7 @@ class AudioSystem {
   }
 
   stopAllSounds() {
-    for (let [name, track] of this.tracks) {
+    for (let [, track] of this.tracks) {
       if (track.isPlaying()) {
         track.stop();
       }

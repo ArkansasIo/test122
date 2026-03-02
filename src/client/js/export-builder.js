@@ -118,8 +118,6 @@ class ExportBuilder {
     this.log('Preparing Windows build...');
 
     // Electron packaging
-    const electronConfig = this.generateElectronConfig();
-
     this.log('Bundling application...');
     const executable = this.bundleElectron('windows');
 
@@ -135,7 +133,6 @@ class ExportBuilder {
   buildMac() {
     this.log('Preparing macOS build...');
 
-    const electronConfig = this.generateElectronConfig();
     const executable = this.bundleElectron('darwin');
 
     this.log('macOS app ready');
@@ -150,7 +147,6 @@ class ExportBuilder {
   buildLinux() {
     this.log('Preparing Linux build...');
 
-    const electronConfig = this.generateElectronConfig();
     const executable = this.bundleElectron('linux');
 
     this.log('Linux binary ready');
@@ -326,7 +322,7 @@ if (document.readyState === 'loading') {
 
 // Platform-specific optimizations
 class PlatformOptimizer {
-  static optimizeForWeb(project) {
+  static optimizeForWeb(_project) {
     return {
       compression: 'gzip',
       imageFmt: 'webp',
@@ -335,7 +331,7 @@ class PlatformOptimizer {
     };
   }
 
-  static optimizeForDesktop(project) {
+  static optimizeForDesktop(_project) {
     return {
       compression: 'lz4',
       imageFmt: 'png',
@@ -344,7 +340,7 @@ class PlatformOptimizer {
     };
   }
 
-  static optimizeForMobile(project) {
+  static optimizeForMobile(_project) {
     return {
       compression: 'brotli',
       imageFmt: 'webp',

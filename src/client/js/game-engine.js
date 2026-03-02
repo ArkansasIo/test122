@@ -3,6 +3,7 @@
  * Modern 2D game runtime for web and desktop
  * No Game Boy constraints - full creative freedom!
  */
+/* global document, requestAnimationFrame */
 
 class GameEngine {
   constructor(canvasId, config = {}) {
@@ -61,11 +62,13 @@ class GameEngine {
   
   setupInputHandlers() {
     // Keyboard
+    // eslint-disable-next-line no-undef
     document.addEventListener('keydown', (e) => {
       this.input.keys[e.key] = true;
       this.onKeyDown(e);
     });
     
+    // eslint-disable-next-line no-undef
     document.addEventListener('keyup', (e) => {
       this.input.keys[e.key] = false;
       this.onKeyUp(e);
@@ -113,6 +116,7 @@ class GameEngine {
     this.update(this.deltaTime);
     this.render();
     
+    // eslint-disable-next-line no-undef
     requestAnimationFrame(this.gameLoop);
   }
   
@@ -226,7 +230,7 @@ class GameEngine {
     actions[e.key]?.();
   }
   
-  onKeyUp(e) {}
+  onKeyUp(_e) {}
   onMouseDown() {}
   onMouseUp() {}
   onMoveUp() {}
@@ -286,7 +290,7 @@ class Sprite {
     this.children = [];
   }
   
-  update(deltaTime) {
+  update(_deltaTime) {
     this.x += this.vx;
     this.y += this.vy;
   }

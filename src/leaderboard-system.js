@@ -164,12 +164,14 @@ class Leaderboard {
   }
 }
 
+/* global window */
 class LeaderboardManager {
   constructor() {
     this.leaderboards = new Map();
     this.currentPlayer = null;
     this.currentScore = null;
     this.achievementCallbacks = {};
+    // eslint-disable-next-line no-undef
     this.localStorage = typeof window !== 'undefined' ? window.localStorage : null;
   }
 

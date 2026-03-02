@@ -245,7 +245,7 @@ class ShaderPass {
     this.parameters[name] = value;
   }
 
-  render(gl, width, height) {
+  render(gl, _width, _height) {
     this.shader.use(gl);
 
     // Set uniforms

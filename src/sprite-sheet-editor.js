@@ -60,6 +60,7 @@ class Sprite {
 
   async loadImage() {
     return new Promise((resolve) => {
+      // eslint-disable-next-line no-undef
       this.image = new Image();
       this.image.onload = () => {
         this.loaded = true;
