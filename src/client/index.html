@@ -59,6 +59,17 @@
       <div class="ttab" data-panel="strings"><span class="tab-icon">📝</span> Strings</div>
       <div class="ttab" data-panel="tables"><span class="tab-icon">📊</span> Tables</div>
       <div class="ttab" data-panel="source"><span class="tab-icon">💻</span> Source</div>
+      <div class="ttab" data-panel="sprites"><span class="tab-icon">👾</span> Sprites</div>
+      <div class="ttab" data-panel="audio"><span class="tab-icon">🔊</span> Audio</div>
+      <div class="ttab" data-panel="particles"><span class="tab-icon">✨</span> Particles</div>
+      <div class="ttab" data-panel="physics"><span class="tab-icon">⚡</span> Physics</div>
+      <div class="ttab" data-panel="shaders"><span class="tab-icon">🎨</span> Shaders</div>
+      <div class="ttab" data-panel="network"><span class="tab-icon">🌐</span> Network</div>
+      <div class="ttab" data-panel="ai"><span class="tab-icon">🤖</span> AI</div>
+      <div class="ttab" data-panel="ui-tools"><span class="tab-icon">🛠</span> UI Tools</div>
+      <div class="ttab" data-panel="analytics"><span class="tab-icon">📈</span> Analytics</div>
+      <div class="ttab" data-panel="cloud"><span class="tab-icon">☁</span> Cloud</div>
+      <div class="ttab" data-panel="plugins"><span class="tab-icon">🔌</span> Plugins</div>
       <div class="ttab" data-panel="build"><span class="tab-icon">🔨</span> Build</div>
       <span class="toolbar-spacer"></span>
       <button class="toolbar-btn primary" id="quickBuild">Build ROM</button>
@@ -253,6 +264,276 @@ Build targets:
 
 Requires GBDK-2020 (auto-installed at ~/gbdk/)</div>
       </div>
+
+      <!-- Sprite Sheet Editor Panel -->
+      <div class="panel editor-panel" id="panel-sprites">
+        <div class="editor-toolbar">
+          <span class="file-name">Sprite Sheet Editor</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="loadSpriteSheet">Load Image</button>
+          <input type="file" id="spriteSheetInput" accept="image/*" style="display:none">
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div id="spriteSheetCanvas" style="background:#2d2d30;border-radius:4px;padding:20px;text-align:center;color:#858585;">
+            Load a sprite sheet image to begin editing
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio System Panel -->
+      <div class="panel editor-panel" id="panel-audio">
+        <div class="editor-toolbar">
+          <span class="file-name">Audio System</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="addAudioTrack">Add Track</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div id="audioTracks" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="color:#858585;text-align:center;padding:40px;">
+              Audio System Ready<br>
+              <small>Add audio tracks to manage game music and sound effects</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Particle System Panel -->
+      <div class="panel editor-panel" id="panel-particles">
+        <div class="editor-toolbar">
+          <span class="file-name">Particle Effects</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="createEmitter">Create Emitter</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;background:#2d2d30;border-radius:4px;padding:20px;">
+              <canvas id="particlePreview" width="400" height="400" style="width:100%;height:100%;"></canvas>
+            </div>
+            <div style="width:300px;background:#2d2d30;border-radius:4px;padding:15px;overflow-y:auto;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Emitter Properties</h3>
+              <div id="particleControls" style="color:#858585;">
+                Select or create an emitter to edit properties
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Physics Engine Panel -->
+      <div class="panel editor-panel" id="panel-physics">
+        <div class="editor-toolbar">
+          <span class="file-name">Physics Engine</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="addPhysicsBody">Add Body</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;background:#2d2d30;border-radius:4px;padding:20px;">
+              <canvas id="physicsPreview" width="600" height="400" style="width:100%;height:100%;border:1px solid #3e3e42;"></canvas>
+            </div>
+            <div style="width:300px;background:#2d2d30;border-radius:4px;padding:15px;overflow-y:auto;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Physics Bodies</h3>
+              <div id="physicsBodies" style="color:#858585;">
+                No physics bodies created yet
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shader System Panel -->
+      <div class="panel editor-panel" id="panel-shaders">
+        <div class="editor-toolbar">
+          <span class="file-name">Shader Editor</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="compileShader">Compile</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
+              <div style="flex:1;background:#2d2d30;border-radius:4px;padding:10px;">
+                <div style="font-size:11px;color:#858585;margin-bottom:5px;">VERTEX SHADER</div>
+                <textarea id="vertexShader" spellcheck="false" style="width:100%;height:calc(100% - 25px);background:#1e1e1e;color:#e0e0e0;border:1px solid #3e3e42;border-radius:3px;padding:10px;font-family:monospace;font-size:12px;resize:none;"></textarea>
+              </div>
+              <div style="flex:1;background:#2d2d30;border-radius:4px;padding:10px;">
+                <div style="font-size:11px;color:#858585;margin-bottom:5px;">FRAGMENT SHADER</div>
+                <textarea id="fragmentShader" spellcheck="false" style="width:100%;height:calc(100% - 25px);background:#1e1e1e;color:#e0e0e0;border:1px solid #3e3e42;border-radius:3px;padding:10px;font-family:monospace;font-size:12px;resize:none;"></textarea>
+              </div>
+            </div>
+            <div style="width:300px;background:#2d2d30;border-radius:4px;padding:20px;">
+              <div style="font-size:11px;color:#858585;margin-bottom:10px;">PREVIEW</div>
+              <canvas id="shaderPreview" width="280" height="280" style="width:100%;border:1px solid #3e3e42;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Network System Panel -->
+      <div class="panel editor-panel" id="panel-network">
+        <div class="editor-toolbar">
+          <span class="file-name">Networking</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="networkConnect">Connect</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;background:#2d2d30;border-radius:4px;padding:20px;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Connection Settings</h3>
+              <div style="display:flex;flex-direction:column;gap:15px;max-width:400px;">
+                <div>
+                  <label style="display:block;color:#858585;font-size:11px;margin-bottom:5px;">SERVER URL</label>
+                  <input type="text" id="networkUrl" placeholder="ws://localhost:8080" style="width:100%;background:#1e1e1e;color:#e0e0e0;border:1px solid #3e3e42;border-radius:3px;padding:8px;">
+                </div>
+                <div>
+                  <label style="display:block;color:#858585;font-size:11px;margin-bottom:5px;">STATUS</label>
+                  <div id="networkStatus" style="padding:8px;background:#1e1e1e;border:1px solid #3e3e42;border-radius:3px;color:#858585;">Disconnected</div>
+                </div>
+              </div>
+            </div>
+            <div style="width:400px;background:#2d2d30;border-radius:4px;padding:15px;display:flex;flex-direction:column;">
+              <h3 style="margin-bottom:10px;color:#e0e0e0;">Network Log</h3>
+              <div id="networkLog" style="flex:1;overflow-y:auto;background:#1e1e1e;border:1px solid #3e3e42;border-radius:3px;padding:10px;font-family:monospace;font-size:11px;color:#858585;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Behavior Tree Panel -->
+      <div class="panel editor-panel" id="panel-ai">
+        <div class="editor-toolbar">
+          <span class="file-name">AI Behavior Trees</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="addAINode">Add Node</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;background:#2d2d30;border-radius:4px;padding:20px;position:relative;overflow:auto;">
+              <canvas id="aiTreeCanvas" width="800" height="600" style="width:100%;height:100%;"></canvas>
+            </div>
+            <div style="width:300px;background:#2d2d30;border-radius:4px;padding:15px;overflow-y:auto;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Node Types</h3>
+              <div id="aiNodeTypes" style="display:flex;flex-direction:column;gap:8px;">
+                <div class="ai-node-type" data-type="sequence" style="padding:10px;background:#1e1e1e;border-radius:3px;cursor:pointer;">Sequence</div>
+                <div class="ai-node-type" data-type="selector" style="padding:10px;background:#1e1e1e;border-radius:3px;cursor:pointer;">Selector</div>
+                <div class="ai-node-type" data-type="action" style="padding:10px;background:#1e1e1e;border-radius:3px;cursor:pointer;">Action</div>
+                <div class="ai-node-type" data-type="condition" style="padding:10px;background:#1e1e1e;border-radius:3px;cursor:pointer;">Condition</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UI Toolkit Panel -->
+      <div class="panel editor-panel" id="panel-ui-tools">
+        <div class="editor-toolbar">
+          <span class="file-name">UI Toolkit</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="addUIElement">Add Element</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;background:#2d2d30;border-radius:4px;padding:20px;">
+              <div id="uiPreview" style="width:100%;height:100%;border:1px solid #3e3e42;position:relative;"></div>
+            </div>
+            <div style="width:300px;background:#2d2d30;border-radius:4px;padding:15px;overflow-y:auto;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">UI Elements</h3>
+              <div id="uiElements" style="display:flex;flex-direction:column;gap:8px;">
+                <button class="ui-element-btn" data-type="button">Button</button>
+                <button class="ui-element-btn" data-type="panel">Panel</button>
+                <button class="ui-element-btn" data-type="label">Label</button>
+                <button class="ui-element-btn" data-type="input">Input</button>
+                <button class="ui-element-btn" data-type="slider">Slider</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Panel -->
+      <div class="panel editor-panel" id="panel-analytics">
+        <div class="editor-toolbar">
+          <span class="file-name">Analytics Dashboard</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="refreshAnalytics">Refresh</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+            <div style="background:#2d2d30;border-radius:4px;padding:20px;">
+              <div style="font-size:11px;color:#858585;margin-bottom:10px;">TOTAL EVENTS</div>
+              <div id="analyticsEvents" style="font-size:32px;color:#e0e0e0;font-weight:bold;">0</div>
+            </div>
+            <div style="background:#2d2d30;border-radius:4px;padding:20px;">
+              <div style="font-size:11px;color:#858585;margin-bottom:10px;">ACTIVE SESSIONS</div>
+              <div id="analyticsSessions" style="font-size:32px;color:#e0e0e0;font-weight:bold;">0</div>
+            </div>
+            <div style="background:#2d2d30;border-radius:4px;padding:20px;">
+              <div style="font-size:11px;color:#858585;margin-bottom:10px;">AVG SESSION TIME</div>
+              <div id="analyticsTime" style="font-size:32px;color:#e0e0e0;font-weight:bold;">0m</div>
+            </div>
+          </div>
+          <div style="margin-top:20px;background:#2d2d30;border-radius:4px;padding:20px;">
+            <h3 style="margin-bottom:15px;color:#e0e0e0;">Event Log</h3>
+            <div id="analyticsLog" style="max-height:300px;overflow-y:auto;font-family:monospace;font-size:11px;color:#858585;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cloud Save Panel -->
+      <div class="panel editor-panel" id="panel-cloud">
+        <div class="editor-toolbar">
+          <span class="file-name">Cloud Save System</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="cloudSync">Sync</button>
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;background:#2d2d30;border-radius:4px;padding:20px;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Save Files</h3>
+              <div id="cloudSaves" style="display:flex;flex-direction:column;gap:10px;color:#858585;">
+                No cloud saves available
+              </div>
+            </div>
+            <div style="width:300px;background:#2d2d30;border-radius:4px;padding:15px;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Sync Status</h3>
+              <div id="cloudStatus" style="padding:10px;background:#1e1e1e;border-radius:3px;color:#858585;">Not synced</div>
+              <div style="margin-top:20px;">
+                <button class="save-btn" id="cloudUpload" style="width:100%;margin-bottom:10px;">Upload Save</button>
+                <button class="save-btn" id="cloudDownload" style="width:100%;">Download Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plugin System Panel -->
+      <div class="panel editor-panel" id="panel-plugins">
+        <div class="editor-toolbar">
+          <span class="file-name">Plugin Manager</span>
+          <span class="spacer"></span>
+          <button class="save-btn" id="loadPlugin">Load Plugin</button>
+          <input type="file" id="pluginInput" accept=".js" style="display:none">
+        </div>
+        <div class="editor-area" style="padding:20px;">
+          <div style="display:flex;gap:20px;height:100%;">
+            <div style="flex:1;background:#2d2d30;border-radius:4px;padding:20px;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Installed Plugins</h3>
+              <div id="pluginList" style="display:flex;flex-direction:column;gap:10px;">
+                <div style="color:#858585;text-align:center;padding:40px;">
+                  No plugins installed<br>
+                  <small>Load a plugin to extend Dragon Studio functionality</small>
+                </div>
+              </div>
+            </div>
+            <div style="width:300px;background:#2d2d30;border-radius:4px;padding:15px;overflow-y:auto;">
+              <h3 style="margin-bottom:15px;color:#e0e0e0;">Plugin Info</h3>
+              <div id="pluginInfo" style="color:#858585;font-size:12px;">
+                Select a plugin to view details
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="status-bar">
@@ -289,6 +570,31 @@ Requires GBDK-2020 (auto-installed at ~/gbdk/)</div>
   <script src="/js/editor-ide.js"></script>
   <script src="/js/widgets.js"></script>
   <script src="/js/gb-studio-init.js"></script>
+  
+  <!-- Advanced Game Development Systems -->
+  <script src="/js/game-engine.js"></script>
+  <script src="/js/sprite-sheet-editor.js"></script>
+  <script src="/js/audio-system.js"></script>
+  <script src="/js/particle-system.js"></script>
+  <script src="/js/physics-engine.js"></script>
+  <script src="/js/shader-system.js"></script>
+  <script src="/js/networking-system.js"></script>
+  <script src="/js/ai-behavior-tree.js"></script>
+  <script src="/js/ui-toolkit.js"></script>
+  <script src="/js/leaderboard-system.js"></script>
+  <script src="/js/analytics-system.js"></script>
+  <script src="/js/cloud-save-system.js"></script>
+  <script src="/js/plugin-system.js"></script>
+  <script src="/js/tilemap-editor.js"></script>
+  <script src="/js/save-game-manager.js"></script>
+  <script src="/js/localization-system.js"></script>
+  <script src="/js/dialogue-system.js"></script>
+  <script src="/js/blueprint-editor.js"></script>
+  <script src="/js/code-editor.js"></script>
+  <script src="/js/input-manager.js"></script>
+  <script src="/js/project-manager.js"></script>
+  <script src="/js/export-builder.js"></script>
+  
   <script src="/js/app.js"></script>
   
   <!-- Fallback: If screen manager doesn't load within 5 seconds, show error -->

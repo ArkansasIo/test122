@@ -65,14 +65,13 @@ function createAppServer() {
   const p = parsed.pathname;
 
   if (p === '/' || p === '/index.html') {
-    // Redirect to new Dragon Studio
-    res.writeHead(301, { 'Location': '/studio' });
-    res.end();
-    return;
+    // Serve classic UI with all advanced features
+    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
   }
 
   if (p === '/studio' || p === '/studio.html') {
-    return serveFile(res, path.join(ROOT_DIR, 'src/client/studio.html'));
+    // Alternative advanced IDE interface
+    return serveFile(res, path.join(ROOT_DIR, 'studio.html'));
   }
 
   if (p.startsWith('/api/')) {
