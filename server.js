@@ -65,18 +65,18 @@ function createAppServer() {
   const p = parsed.pathname;
 
   if (p === '/' || p === '/index.html') {
-    // Serve Unreal Engine-style interface
+    // Serve classic tab-based interface (default)
+    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
+  }
+
+  if (p === '/unreal' || p === '/unreal.html') {
+    // Unreal Engine-style 4-panel interface
     return serveFile(res, path.join(ROOT_DIR, 'unreal-studio.html'));
   }
 
   if (p === '/studio' || p === '/studio.html') {
-    // Alternative modern sidebar interface
+    // Modern sidebar interface
     return serveFile(res, path.join(ROOT_DIR, 'studio.html'));
-  }
-
-  if (p === '/classic' || p === '/classic.html') {
-    // Alternative classic tab-based interface
-    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
   }
 
   if (p.startsWith('/api/')) {
