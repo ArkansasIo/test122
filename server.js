@@ -65,7 +65,12 @@ function createAppServer() {
   const p = parsed.pathname;
 
   if (p === '/' || p === '/index.html') {
-    // Serve advanced Dragon Studio with sidebar UI
+    // Serve Unreal Engine-style interface
+    return serveFile(res, path.join(ROOT_DIR, 'unreal-studio.html'));
+  }
+
+  if (p === '/studio' || p === '/studio.html') {
+    // Alternative modern sidebar interface
     return serveFile(res, path.join(ROOT_DIR, 'studio.html'));
   }
 
