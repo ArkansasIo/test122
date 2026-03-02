@@ -65,13 +65,13 @@ function createAppServer() {
   const p = parsed.pathname;
 
   if (p === '/' || p === '/index.html') {
-    // Serve classic UI with all advanced features
-    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
+    // Serve advanced Dragon Studio with sidebar UI
+    return serveFile(res, path.join(ROOT_DIR, 'studio.html'));
   }
 
-  if (p === '/studio' || p === '/studio.html') {
-    // Alternative advanced IDE interface
-    return serveFile(res, path.join(ROOT_DIR, 'studio.html'));
+  if (p === '/classic' || p === '/classic.html') {
+    // Alternative classic tab-based interface
+    return serveFile(res, path.join(ROOT_DIR, 'src/client/index.html'));
   }
 
   if (p.startsWith('/api/')) {
