@@ -17,9 +17,11 @@
     "build-game": "npm run tools build",
     "convert-assets": "npm run tools convert-png ./assets/tiles ./data && npm run tools convert-map ./res/maps ./data",
     "build-exe": "npx -y @yao-pkg/pkg@5.11.5 compile-cli.js --output compile.exe --targets node18-win-x64",
+    "build-web-exe": "npx -y @yao-pkg/pkg@5.11.5 web-app.js --output web-app.exe --targets node18-win-x64",
     "setup-output": "node setup-output.js",
-    "web": "node server.js",
-    "web:dev": "node server.js"
+    "web": "node web-app.js",
+    "web:dev": "node web-app.js",
+    "web:server": "node server.js"
   },
   "keywords": [
     "gameboy",

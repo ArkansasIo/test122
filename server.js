@@ -79,6 +79,11 @@ function createAppServer() {
     return serveFile(res, path.join(ROOT_DIR, 'studio.html'));
   }
 
+  if (p === '/unreal' || p === '/unreal.html') {
+    // Unreal Engine 4-panel interface
+    return serveFile(res, path.join(ROOT_DIR, 'unreal-studio.html'));
+  }
+
   if (p.startsWith('/api/')) {
     return handleAPI(req, res, p, parsed.query);
   }
